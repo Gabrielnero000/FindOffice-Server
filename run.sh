@@ -12,4 +12,4 @@ gunicorn \
     --access-logfile - \
     --timeout=6000 \
     "${PRELOAD}" \
-    backend.api:app
+    backend.server:app

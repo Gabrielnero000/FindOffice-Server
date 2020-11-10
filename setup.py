@@ -8,6 +8,7 @@ setup(
     install_requires=[
         'flask',
         'gunicorn',
-        'fire'
+        'fire',
+        'loguru'
     ],
 )
