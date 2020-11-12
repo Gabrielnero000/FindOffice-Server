@@ -50,7 +50,7 @@ class AuthApi(Api):
         # Insert user
         insert_sql = "INSERT INTO users (name, email, password, legalPerson, cpf, cnpj, isTenant) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         values = (user['name'], user['email'], user['password'],
-                  user['legalPerson'], user['cpf'], user['legalPerson'], user['isTenant'])
+                  user['isLegalPerson'], user['cpf'], user['cnpj'], user['isTenant'])
         cursor.execute(insert_sql, values)
         self._db.commit()
 
