@@ -10,7 +10,6 @@ auth_api = AuthApi()
 user_api = UserApi()
 tenant_api = TenantApi()
 
-
 @app.route('/auth/login', methods=['POST'])
 def login():
     data = request.json
@@ -21,6 +20,11 @@ def login():
 def sign_up():
     data = request.json
     return jsonify(auth_api.singUp(data['user']))
+
+@app.route('/tenant/get_offices', methods=['POST'])
+def get_offices():
+    data = request.json
+    return jsonify(tenant_api.getOffices(data['tenant_id']))
 
 
 def launch(port=5804, debug=False):
