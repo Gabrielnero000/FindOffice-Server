@@ -10,8 +10,6 @@ auth_api = AuthApi()
 user_api = UserApi()
 tenant_api = TenantApi()
 
-test = 'qualquer coisa'
-
 
 @app.route('/auth/login', methods=['POST'])
 def login():
