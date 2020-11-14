@@ -15,7 +15,7 @@ class TenantApi(Api):
             'offices': cursor.fetchall()
         }
 
-    def exclude_office(self, id_office):
+    def excludeOffice(self, id_office):
         cursor = self._db.getCursor()
 
         sql = f"DELETE FROM offices WHERE officeId  = '{id_office}'"
@@ -29,7 +29,7 @@ class TenantApi(Api):
         if db_office is not None:
             return {
                 'success': False,
-                'error': 'Office not deleted'
+                'error': 'Office not excluded'
             }
         return{
             'sucess': True
