@@ -21,6 +21,11 @@ def sign_up():
     data = request.json
     return jsonify(auth_api.singUp(data['user']))
 
+@app.route('/tenant/get_offices', methods=['POST'])
+def get_offices():
+    data = request.json
+    return jsonify(tenant_api.getOffices(data['tenant_id']))
+
 
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)
