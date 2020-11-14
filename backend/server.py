@@ -26,6 +26,10 @@ def get_offices():
     data = request.json
     return jsonify(tenant_api.getOffices(data['tenant_id']))
 
+@app.route('/tenant/exclude_office', methods=['POST'])
+def exclude_office():
+    data = request.json
+    return jsonify(tenant_api.excludeOffice(data['office_id']))
 
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)
