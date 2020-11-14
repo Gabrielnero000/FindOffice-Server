@@ -5,4 +5,4 @@ class TenantApi(Api):
         super().__init__()
 
     def exclude_office():
-        print("teste")
+        print("teste!")
