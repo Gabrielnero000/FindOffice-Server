@@ -15,3 +15,5 @@ class TenantApi(Api):
             'offices': cursor.fetchall()
         }
 
+    def exclude_office(self):
+        print("teste!")
