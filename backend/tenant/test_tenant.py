@@ -7,11 +7,21 @@ def testGetOffices():
     tenant_id = 0
     print(tenant_api.getOffices(tenant_id))
 
-def testAddOffices():
+def testAddOffice():
     tenant_api = TenantApi()
 
-    tenant_id = 0
-    print(tenant_api.addOffices(tenant_id))
+    office = {
+        'id_owner': 1,
+        'addres': 'João Pessoa, Bancarios, Rua dos Ipes',
+        'district': 'Paraiba',
+        'number': '50',
+        'extra': 'lugar bonito',
+        'scoring': 5,
+        'nscore': 10
+    }
+
+    pp(tenant_api.addOffice(office))
+
 
 if __name__ == "__main__":
     fire.Fire()

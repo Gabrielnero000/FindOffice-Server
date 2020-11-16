@@ -18,7 +18,7 @@ class TenantApi(Api):
     def exclude_office(self):
         print("teste!")
 
-    def addOffices(self, id_owner, address, district, number, extra, scoring, nScore):
+    def addOffice(self, office):
         cursor = self._db.getCursor()
 
         sql = "INSERT INTO offices (ownerId, address, district, number, extra, scoring, nScore) VALUES (%s, %s, %s, %s, %s, %s, %s)"
