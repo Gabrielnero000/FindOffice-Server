@@ -50,12 +50,21 @@ class TenantApi(Api):
             f"WHERE officeId = {office_info['officeId']}")
 
         cursor.execute(sql)
+
+        return_sql = f"SELECT * FROM offices WHERE officeId = {office_info['officeId']}"
+
+        cursor.execute(return_sql)
         db_office = cursor.fetchone()
 
         if db_office is None:
             return {
                 'success': False,
                 'error': 'Office not found'
+            }
+        if db_office != tuple(office_info.values()):
+            return {
+                'success': False,
+                'error': 'Office not modified'
             }
         return{
             'success': True,
