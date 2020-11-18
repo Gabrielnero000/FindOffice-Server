@@ -38,7 +38,11 @@ class TenantApi(Api):
     def modifyOffice(self, office_info):
         cursor = self._db.getCursor()
 
-        sql = (
+        pre_update = f"SELECT * FROM offices WHERE officeId = {office_info['officeId']}"
+        cursor.execute(pre_update)
+        db_office_pre = cursor.fetchone()
+
+        update = (
             f"UPDATE offices "
             f"SET ownerId = '{office_info['ownerId']}', "
             f"address = '{office_info['address']}', "
@@ -49,24 +53,23 @@ class TenantApi(Api):
             f"nScore = '{office_info['nScore']}' "
             f"WHERE officeId = {office_info['officeId']}")
 
-        cursor.execute(sql)
+        cursor.execute(update)
 
-        return_sql = f"SELECT * FROM offices WHERE officeId = {office_info['officeId']}"
+        post_update = f"SELECT * FROM offices WHERE officeId = {office_info['officeId']}"
+        cursor.execute(post_update)
+        db_office_post = cursor.fetchone()
 
-        cursor.execute(return_sql)
-        db_office = cursor.fetchone()
-
-        if db_office is None:
+        if db_office_post is None:
             return {
                 'success': False,
                 'error': 'Office not found'
             }
-        if db_office != tuple(office_info.values()):
+        if db_office_pre == db_office_post:
             return {
                 'success': False,
                 'error': 'Office not modified'
             }
         return{
             'success': True,
-            'office': db_office
+            'office': db_office_post
         }
