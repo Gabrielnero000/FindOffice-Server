@@ -7,12 +7,12 @@ class UserApi(Api):
     def __init__(self):
         super().__init__()
 
-    def getOfficeOccupation(self, id_rent, month):
+    def getOfficeOccupation(self, id_office, month):
         cursor = self._db.getCursor()
 
         sql = (
             f"SELECT bookingStart, bookingEnd FROM rents "
-            f"WHERE rentId = '{id_rent}' "
+            f"WHERE officeId = '{id_office}' "
             f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}')")
         cursor.execute(sql)
         db_rents = cursor.fetchall()

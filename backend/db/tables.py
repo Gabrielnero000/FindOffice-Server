@@ -27,6 +27,7 @@ TABLES['offices'] = (
 TABLES['rents'] = (
     "CREATE TABLE rents ("
     "  rentId INT NOT NULL AUTO_INCREMENT,"
+    "  officeId INT NOT NULL,"
     "  userId INT NOT NULL,"
     "  bookingStart DATETIME NOT NULL,"
     "  bookingEnd DATETIME NOT NULL,"
