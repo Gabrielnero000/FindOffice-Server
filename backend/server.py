@@ -36,6 +36,11 @@ def modify_office():
     data = request.json
     return jsonify(tenant_api.modifyOffice(data['office']))
 
+@app.route('/user/get_office_occupation', methods=['POST'])
+def get_office_occupation():
+    data = request.json
+    return jsonify(user_api.getOfficeOccupation(data['office_id'], data['month']))
+
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)
 
