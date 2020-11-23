@@ -23,8 +23,8 @@ def testModifyOffice():
         'district': 'dist',
         'number': '123',
         'extra': 'oi',
-        'scoring': 7,
-        'nScore': 77
+        'scoring': 0,
+        'nScore': 0
     }
     print(tenant_api.modifyOffice(office_info))
 
