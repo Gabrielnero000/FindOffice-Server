@@ -7,21 +7,26 @@ def testGetOffices():
     tenant_id = 0
     print(tenant_api.getOffices(tenant_id))
 
-def testAddOffice():
+def testexcludeOffice():
     tenant_api = TenantApi()
 
-    office = {
-        'id_owner': 1,
-        'addres': 'João Pessoa, Bancarios, Rua dos Ipes',
-        'district': 'Paraiba',
-        'number': '50',
-        'extra': 'lugar bonito',
-        'scoring': 5,
-        'nscore': 10
+    office_id = 0
+    print(tenant_api.excludeOffice(office_id))
+
+def testModifyOffice():
+    tenant_api = TenantApi()
+
+    office_info = {
+        'officeId': 0,
+        'ownerId': 0,
+        'address': 'rua',
+        'district': 'dist',
+        'number': '123',
+        'extra': 'oi',
+        'scoring': 7,
+        'nScore': 77
     }
-
-    pp(tenant_api.addOffice(office))
-
+    print(tenant_api.modifyOffice(office_info))
 
 if __name__ == "__main__":
     fire.Fire()
