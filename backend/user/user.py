@@ -8,10 +8,10 @@ class UserApi(Api):
     def __init__(self):
         super().__init__()
 
-    def checkOut(self, id_rent):
+    def checkIn(self, id_rent):
         cursor = self._db.getCursor()
 
-        data_atual = datetime.date.today()
+        current_date = datetime.date.today()
 
         sql = f"SELECT * FROM rents WHERE rentId = '{id_rent}'"
 
@@ -19,19 +19,49 @@ class UserApi(Api):
 
         update = ( 
         f"UPDATE rents"
-        f"SET checkOut = '{data_atual}'"
+        f"SET checkIn = '{current_date}'"
         f"WHERE rentId = '{id_rent}'")
 
         cursor.execute(update)
 
-        valida = f"SELECT checkOut FROM rents WHERE rentId = '{id_rent}'"
+        validation = f"SELECT checkIn FROM rents WHERE rentId = '{id_rent}'"
 
-        cursor.execute(valida)
+        cursor.execute(validation)
 
-        if valida != data_atual:
+        if validation != current_date:
             return {
                 'success': False,
-                'error': 'Unable to checkout '
+                'error': 'Unable to checkin'
+            }
+
+        return {
+                'success': True
+        }         
+
+    def checkOut(self, id_rent):
+        cursor = self._db.getCursor()
+
+        current_date = datetime.date.today()
+
+        sql = f"SELECT * FROM rents WHERE rentId = '{id_rent}'"
+
+        cursor.execute(sql)
+
+        update = ( 
+        f"UPDATE rents"
+        f"SET checkOut = '{current_date}'"
+        f"WHERE rentId = '{id_rent}'")
+
+        cursor.execute(update)
+
+        validation = f"SELECT checkOut FROM rents WHERE rentId = '{id_rent}'"
+
+        cursor.execute(validation)
+
+        if validation != current_date:
+            return {
+                'success': False,
+                'error': 'Unable to checkout'
             }
 
         return {
