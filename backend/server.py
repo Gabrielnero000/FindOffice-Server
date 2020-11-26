@@ -41,6 +41,11 @@ def get_office_occupation():
     data = request.json
     return jsonify(user_api.getOfficeOccupation(data['office_id'], data['month']))
 
+@app.route('/user/rent', methods=['POST'])
+def rent():
+    data = request.json
+    return jsonify(user_api.rent(data['office_id'], data['user_id'], data['rent_days']))
+
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)
 
