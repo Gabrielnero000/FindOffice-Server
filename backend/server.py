@@ -41,6 +41,11 @@ def get_office_occupation():
     data = request.json
     return jsonify(user_api.getOfficeOccupation(data['office_id'], data['month']))
 
+@app.route('user/check_out', methods=['POST'])
+def check_out():
+    data = request.json
+    return jsonify(user_api.checkOut(data['rent_id']))
+
 @app.route('/user/rent', methods=['POST'])
 def rent():
     data = request.json
