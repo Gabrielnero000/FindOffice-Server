@@ -36,15 +36,20 @@ def modify_office():
     data = request.json
     return jsonify(tenant_api.modifyOffice(data['office']))
 
-@app.route('/user/get_office_occupation', methods=['POST'])
-def get_office_occupation():
+@app.route('/user/check_in', methods=['POST'])
+def check_in():
     data = request.json
-    return jsonify(user_api.getOfficeOccupation(data['office_id'], data['month']))
+    return jsonify(user_api.checkIn(data['rent_id']))
 
 @app.route('user/check_out', methods=['POST'])
 def check_out():
     data = request.json
     return jsonify(user_api.checkOut(data['rent_id']))
+
+@app.route('/user/get_office_occupation', methods=['POST'])
+def get_office_occupation():
+    data = request.json
+    return jsonify(user_api.getOfficeOccupation(data['office_id'], data['month']))
 
 @app.route('/user/rent', methods=['POST'])
 def rent():

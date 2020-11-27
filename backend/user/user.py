@@ -17,7 +17,7 @@ class UserApi(Api):
 
         cursor.execute(sql)
 
-        update = ( 
+        update = (
         f"UPDATE rents"
         f"SET checkIn = '{current_date}'"
         f"WHERE rentId = '{id_rent}'")
@@ -36,7 +36,7 @@ class UserApi(Api):
 
         return {
                 'success': True
-        }         
+        }
 
     def checkOut(self, id_rent):
         cursor = self._db.getCursor()
