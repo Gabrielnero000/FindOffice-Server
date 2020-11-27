@@ -17,7 +17,7 @@ class UserApi(Api):
 
         cursor.execute(sql)
 
-        update = ( 
+        update = (
         f"UPDATE rents"
         f"SET checkIn = '{current_date}'"
         f"WHERE rentId = '{id_rent}'")
@@ -36,7 +36,7 @@ class UserApi(Api):
 
         return {
                 'success': True
-        }         
+        }
 
     def checkOut(self, id_rent):
         cursor = self._db.getCursor()
@@ -47,7 +47,7 @@ class UserApi(Api):
 
         cursor.execute(sql)
 
-        update = ( 
+        update = (
         f"UPDATE rents"
         f"SET checkOut = '{current_date}'"
         f"WHERE rentId = '{id_rent}'")
@@ -66,7 +66,7 @@ class UserApi(Api):
 
         return {
                 'success': True
-        }     
+        }
 
 
     def getOfficeOccupation(self, id_office, month):
@@ -93,10 +93,25 @@ class UserApi(Api):
                 occupied_days.extend(range(start.day, monthrange(start.year, start.month)[1]+1))
             else:
                 occupied_days.extend(range(start.day, end.day+1))
-        # remove dias duplicados
-        occupied_days = list(dict.fromkeys(occupied_days))
 
         return {
             'success': True,
             'days': occupied_days
+        }
+
+    def rent(self, id_office, id_user, rent_days):
+        cursor = self._db.getCursor()
+
+        insert = (
+            f"INSERT INTO rents (officeId, userId, bookingStart, bookingEnd)"
+            f"VALUES ('{id_office}', '{id_user}', '{rent_days[0]}', '{rent_days[-1]}')")
+        cursor.execute(insert)
+
+        select = f"SELECT * FROM rents WHERE rentId = LAST_INSERT_ID()"
+        cursor.execute(select)
+        db_rent = cursor.fetchone()
+
+        return {
+            'success': True,
+            'rent': db_rent
         }
