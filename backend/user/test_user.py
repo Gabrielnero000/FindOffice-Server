@@ -2,6 +2,12 @@ from backend.user import UserApi
 import fire
 import datetime
 
+def testCheckIn():
+    user_api = UserApi()
+
+    rent_id = 0
+    print(user_api.checkIn(rent_id))
+
 def testCheckOut():
     user_api = UserApi()
 
