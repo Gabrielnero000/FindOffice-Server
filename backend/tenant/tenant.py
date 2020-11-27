@@ -86,7 +86,12 @@ class TenantApi(Api):
         query_sql = "SELECT * FROM offices WHERE officeId = last_insert_id()"
         cursor.execute(query_sql)
         db_office = cursor.fetchone()
-
+        if db_office is None
+        return {
+            'success': False
+            'error': 'Erro ao inserir'
+        }
+        
 	return {
             'success':True,
             'office': db_office,
