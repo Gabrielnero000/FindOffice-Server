@@ -79,7 +79,7 @@ class TenantApi(Api):
 
         sql = "INSERT INTO offices (ownerId, address, district, number, extra, scoring, nScore) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         values = (office['id_owner'], office['address'], office['district'],
-                  office['number'], office['extra'], office['scoring'], office['nScore'])
+                  office['number'], office['extra'], 0, 0)
         cursor.execute(sql, values)
         self._db.commit()
 
