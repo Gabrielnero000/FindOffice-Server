@@ -17,7 +17,7 @@ def testGetOfficeOccupation():
 def testGet_all_offices():
     user_api = UserApi()
 
-    print(get_all_offices())
+    print(user_api.get_all_offices())
 
 if __name__ == "__main__":
     fire.Fire()
