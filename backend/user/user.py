@@ -70,3 +70,13 @@ class UserApi(Api):
             'success': True,
             'days': occupied_days
         }
+    
+    def get_all_offices(self):
+        cursor = self._db.getCursor()
+        sql = "SELECT * FROM offices ORDER BY scoring DESC LIMIT 10"
+        cursor.execute(sql)
+
+        return {
+            'success': True,
+            'offices': cursor.fetchall()
+        }

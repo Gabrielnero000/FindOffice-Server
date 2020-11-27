@@ -14,5 +14,10 @@ def testGetOfficeOccupation():
     month=7
     print(user_api.getOfficeOccupation(id_office, month))
 
+def testGet_all_offices():
+    user_api = Userapi()
+
+    print(get_all_offices())
+
 if __name__ == "__main__":
     fire.Fire()
