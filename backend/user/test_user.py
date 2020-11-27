@@ -15,7 +15,7 @@ def testGetOfficeOccupation():
     print(user_api.getOfficeOccupation(id_office, month))
 
 def testGet_all_offices():
-    user_api = Userapi()
+    user_api = UserApi()
 
     print(get_all_offices())
 
