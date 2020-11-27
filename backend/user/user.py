@@ -13,60 +13,83 @@ class UserApi(Api):
 
         current_date = datetime.date.today()
 
-        sql = f"SELECT * FROM rents WHERE rentId = '{id_rent}'"
+        preCheckIn = f"SELECT bookingStart FROM rents WHERE rentId = '{id_rent}'"
 
-        cursor.execute(sql)
+        cursor.execute(preCheckIn)
 
-        update = (
-        f"UPDATE rents"
-        f"SET checkIn = '{current_date}'"
-        f"WHERE rentId = '{id_rent}'")
+        if preCheckIn == current_date:
 
-        cursor.execute(update)
+            sql = f"SELECT * FROM rents WHERE rentId = '{id_rent}'"
 
-        validation = f"SELECT checkIn FROM rents WHERE rentId = '{id_rent}'"
+             cursor.execute(sql)
 
-        cursor.execute(validation)
+             update = (
+             f"UPDATE rents"
+             f"SET checkIn = '{current_date}'"
+             f"WHERE rentId = '{id_rent}'")
 
-        if validation != current_date:
+             cursor.execute(update)
+
+            validation = f"SELECT checkIn FROM rents WHERE rentId = '{id_rent}'"
+
+            cursor.execute(validation)
+
+            if validation != current_date:
+                return {
+                    'success': False,
+                    'error': 'Unable to checkin'
+                }
+
             return {
-                'success': False,
-                'error': 'Unable to checkin'
+                'success': True
             }
 
         return {
-                'success': True
-        }
+                'success': False,
+                'error': 'Booking date not found.'
+        }    
 
     def checkOut(self, id_rent):
         cursor = self._db.getCursor()
 
         current_date = datetime.date.today()
 
-        sql = f"SELECT * FROM rents WHERE rentId = '{id_rent}'"
+        preCheckOut = f"SELECT checkIn FROM rents WHERE rentId = '{id_rent}'
 
-        cursor.execute(sql)
+        cursor.execute(preCheckOut)
 
-        update = (
-        f"UPDATE rents"
-        f"SET checkOut = '{current_date}'"
-        f"WHERE rentId = '{id_rent}'")
-
-        cursor.execute(update)
-
-        validation = f"SELECT checkOut FROM rents WHERE rentId = '{id_rent}'"
-
-        cursor.execute(validation)
-
-        if validation != current_date:
-            return {
-                'success': False,
-                'error': 'Unable to checkout'
+        if preCheckOut is None:
+            return{
+            'sucess': False,
+            'error': 'You have to check-in first.'
             }
 
-        return {
-                'success': True
-        }
+        else:
+
+            sql = f"SELECT * FROM rents WHERE rentId = '{id_rent}'"
+
+            cursor.execute(sql)
+
+            update = (
+            f"UPDATE rents"
+            f"SET checkOut = '{current_date}'"
+            f"WHERE rentId = '{id_rent}'")
+
+            cursor.execute(update)
+
+            validation = f"SELECT checkOut FROM rents WHERE rentId = '{id_rent}'"
+
+            cursor.execute(validation)
+
+            if validation != current_date:
+                return {
+                    'success': False,
+                    'error': 'Unable to checkout'
+                }
+
+            return {
+                    'success': True
+            }
 
 
     def getOfficeOccupation(self, id_office, month):
