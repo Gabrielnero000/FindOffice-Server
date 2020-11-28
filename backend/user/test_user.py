@@ -29,5 +29,11 @@ def testRent():
     days = [datetime.datetime(2020,10,20), datetime.datetime(2020,10,21), datetime.datetime(2020,10,22)]
     print(user_api.rent(id_office, id_user, days))
 
+def testGet_all_offices():
+    user_api = UserApi()
+
+    #Quando puder adicionar imóveis testo novamente
+    print(user_api.get_all_offices())
+
 if __name__ == "__main__":
     fire.Fire()
