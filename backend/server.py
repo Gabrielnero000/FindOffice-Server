@@ -41,7 +41,7 @@ def check_in():
     data = request.json
     return jsonify(user_api.checkIn(data['rent_id']))
 
-@app.route('user/check_out', methods=['POST'])
+@app.route('/user/check_out', methods=['POST'])
 def check_out():
     data = request.json
     return jsonify(user_api.checkOut(data['rent_id']))

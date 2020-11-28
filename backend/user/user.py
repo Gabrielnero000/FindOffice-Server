@@ -118,7 +118,7 @@ class UserApi(Api):
         
     def get_all_offices(self):
         cursor = self._db.getCursor()
-        sql = "SELECT * FROM offices ORDER BY scoring DESC LIMIT 10"
+        sql = "SELECT * FROM offices ORDER BY scoring/nScore DESC LIMIT 10"
         cursor.execute(sql)
 
         return {
