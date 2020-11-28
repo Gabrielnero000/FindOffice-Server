@@ -21,14 +21,14 @@ class UserApi(Api):
 
             sql = f"SELECT * FROM rents WHERE rentId = '{id_rent}'"
 
-             cursor.execute(sql)
+            cursor.execute(sql)
 
-             update = (
-             f"UPDATE rents"
-             f"SET checkIn = '{current_date}'"
-             f"WHERE rentId = '{id_rent}'")
+            update = (
+            f"UPDATE rents"
+            f"SET checkIn = '{current_date}'"
+            f"WHERE rentId = '{id_rent}'")
 
-             cursor.execute(update)
+            cursor.execute(update)
 
             validation = f"SELECT checkIn FROM rents WHERE rentId = '{id_rent}'"
 
@@ -46,7 +46,7 @@ class UserApi(Api):
 
         return {
                 'success': False,
-                'error': 'Booking date not found.'
+                'error': 'You can only check-in on the date of your booking.'
         }    
 
     def checkOut(self, id_rent):
@@ -54,7 +54,7 @@ class UserApi(Api):
 
         current_date = datetime.date.today()
 
-        preCheckOut = f"SELECT checkIn FROM rents WHERE rentId = '{id_rent}'
+        preCheckOut = f"SELECT checkIn FROM rents WHERE rentId = '{id_rent}'"
 
         cursor.execute(preCheckOut)
 
