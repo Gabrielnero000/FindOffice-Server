@@ -11,20 +11,17 @@ def testLogin():
     pp(auth_api.login(email, password))
 
 
-def testSingUp():
+def testSignUp():
     auth_api = AuthApi()
 
     user = {
         'name': 'Gabriel',
         'email': 'gabriel@email.com',
         'password': 'fake',
-        'legalPerson': 0,
-        'cpf': '09954817417',
-        'cnpj': None,
-        'isTenant': 0
+        'type': 'landlord'
     }
 
-    pp(auth_api.singUp(user))
+    pp(auth_api.signUp(user))
 
 
 if __name__ == "__main__":

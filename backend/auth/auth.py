@@ -34,7 +34,7 @@ class AuthApi(Api):
             'error': None
         }
 
-    def singUp(self, user):
+    def signUp(self, user):
         cursor = self._db.getCursor()
 
         # Check if there is any users with that email
