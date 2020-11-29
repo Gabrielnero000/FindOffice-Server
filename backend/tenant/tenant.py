@@ -14,27 +14,22 @@ class TenantApi(Api):
         current_date = datetime.date.today()
 
         preCheckIn = f"SELECT bookingStart FROM rents WHERE rentId = '{id_rent}'"
-
         cursor.execute(preCheckIn)
+        db_PreCheckIn = cursor.fetchone()
 
-        if preCheckIn == current_date:
-
-            sql = f"SELECT * FROM rents WHERE rentId = '{id_rent}'"
-
-            cursor.execute(sql)
+        if db_PreCheckIn == current_date:
 
             update = (
             f"UPDATE rents"
             f"SET checkIn = '{current_date}'"
             f"WHERE rentId = '{id_rent}'")
-
             cursor.execute(update)
 
             validation = f"SELECT checkIn FROM rents WHERE rentId = '{id_rent}'"
-
             cursor.execute(validation)
+            db_validation = cursor.fetchone()
 
-            if validation != current_date:
+            if db_validation != current_date:
                 return {
                     'success': False,
                     'error': 'Unable to checkin'
@@ -47,7 +42,7 @@ class TenantApi(Api):
         return {
                 'success': False,
                 'error': 'You can only check-in on the date of your booking.'
-        }    
+        }
 
     def checkOut(self, id_rent):
         cursor = self._db.getCursor()
@@ -55,33 +50,27 @@ class TenantApi(Api):
         current_date = datetime.date.today()
 
         preCheckOut = f"SELECT checkIn FROM rents WHERE rentId = '{id_rent}'"
-
         cursor.execute(preCheckOut)
+        db_preCheckOut = cursor.fetchone()
 
-        if preCheckOut is None:
+        if db_preCheckOut is None:
             return{
-            'sucess': False,
+            'success': False,
             'error': 'You have to check-in first.'
             }
 
         else:
-
-            sql = f"SELECT * FROM rents WHERE rentId = '{id_rent}'"
-
-            cursor.execute(sql)
-
             update = (
             f"UPDATE rents"
             f"SET checkOut = '{current_date}'"
             f"WHERE rentId = '{id_rent}'")
-
             cursor.execute(update)
 
             validation = f"SELECT checkOut FROM rents WHERE rentId = '{id_rent}'"
-
             cursor.execute(validation)
+            db_validation = cursor.fetchone()
 
-            if validation != current_date:
+            if db_validation != current_date:
                 return {
                     'success': False,
                     'error': 'Unable to checkout'
@@ -122,12 +111,12 @@ class TenantApi(Api):
             'days': occupied_days
         }
 
-    def rent(self, id_office, id_user, rent_days):
+    def rent(self, id_office, id_tenant, rent_days):
         cursor = self._db.getCursor()
 
         insert = (
-            f"INSERT INTO rents (officeId, userId, bookingStart, bookingEnd)"
-            f"VALUES ('{id_office}', '{id_user}', '{rent_days[0]}', '{rent_days[-1]}')")
+            f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd)"
+            f"VALUES ('{id_office}', '{id_tenant}', '{rent_days[0]}', '{rent_days[-1]}')")
         cursor.execute(insert)
 
         select = f"SELECT * FROM rents WHERE rentId = LAST_INSERT_ID()"
@@ -138,7 +127,7 @@ class TenantApi(Api):
             'success': True,
             'rent': db_rent
         }
-        
+
     def get_all_offices(self):
         cursor = self._db.getCursor()
         sql = "SELECT * FROM offices ORDER BY scoring/nScore DESC LIMIT 10"

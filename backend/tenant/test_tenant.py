@@ -25,9 +25,9 @@ def testRent():
     user_api = TenantApi()
 
     id_office = 0
-    id_user = 0
+    id_tenant = 0
     days = [datetime.datetime(2020,10,20), datetime.datetime(2020,10,21), datetime.datetime(2020,10,22)]
-    print(user_api.rent(id_office, id_user, days))
+    print(user_api.rent(id_office, id_tenant, days))
 
 def testGet_all_offices():
     user_api = TenantApi()

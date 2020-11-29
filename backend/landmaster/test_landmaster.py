@@ -4,8 +4,8 @@ import fire
 def testGetOffices():
     tenant_api = LandmasterApi()
 
-    tenant_id = 0
-    print(tenant_api.getOffices(tenant_id))
+    landlord_id = 0
+    print(tenant_api.getOffices(landlord_id))
 
 def testexcludeOffice():
     tenant_api = LandmasterApi()
@@ -18,13 +18,15 @@ def testModifyOffice():
 
     office_info = {
         'officeId': 0,
-        'ownerId': 0,
+        'landlordId': 0,
         'address': 'rua',
         'district': 'dist',
         'number': '123',
-        'extra': 'oi',
+        'description': 'desc',
         'scoring': 7,
-        'nScore': 77
+        'nScore': 77,
+        'daily_rate': 4.0,
+        'type': 'escritorio'
     }
     print(tenant_api.modifyOffice(office_info))
 
