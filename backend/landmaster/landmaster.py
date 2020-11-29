@@ -7,7 +7,7 @@ class LandmasterApi(Api):
     def getOffices(self, id_tenant):
         cursor = self._db.getCursor()
 
-        sql = f"SELECT * FROM offices WHERE ownerId = '{id_tenant}'"
+        sql = f"SELECT * FROM offices WHERE landlordId = '{id_tenant}'"
         cursor.execute(sql)
 
         return {
