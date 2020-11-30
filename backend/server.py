@@ -21,7 +21,7 @@ def sign_up():
     data = request.json
     return jsonify(auth_api.signUp(data['user']))
 
-@app.route('/tenant/get_offices', methods=['POST'])
+@app.route('/tenant/get_offices', methods=['GET'])
 def get_offices():
     data = request.json
     return jsonify(landmaster_api.getOffices(data['tenant_id']))
@@ -46,7 +46,7 @@ def check_out():
     data = request.json
     return jsonify(tenant_api.checkOut(data['rent_id']))
 
-@app.route('/user/get_office_occupation', methods=['POST'])
+@app.route('/user/get_office_occupation', methods=['GET'])
 def get_office_occupation():
     data = request.json
     return jsonify(tenant_api.getOfficeOccupation(data['office_id'], data['month']))
@@ -60,6 +60,11 @@ def rent():
 def get_all_offices():
     data = request.json
     return jsonify(tenant_api.get_all_offices())
+
+@app.route('/user/search_offices', methods=['GET'])
+def search_offices():
+    data = request.json
+    return jsonify(tenant_api.searchOffices(data['office']))
 
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)

@@ -137,3 +137,37 @@ class TenantApi(Api):
             'success': True,
             'offices': cursor.fetchall()
         }
+
+    def searchOffices(self, filter):
+        cursor = self._db.getCursor()
+
+        sql = (
+            f"SELECT * FROM offices "
+            f"WHERE description LIKE '%{filter['description']}%' "
+            f"AND type LIKE '%{filter['type']}%' "
+            f"AND city LIKE '%{filter['city']}%' "
+            f"AND district LIKE '%{filter['district']}%' "
+            f"AND capacity >= '{filter['capacity']}' "
+            f"AND (daily_rate BETWEEN '{filter['min_price']}' AND '{filter['max_price']}') "
+            f"ORDER BY {filter['order_by']} DESC")
+        cursor.execute(sql)
+        db_offices = cursor.fetchall()
+
+        if len(db_offices) == 0:
+            return {
+                'success': True,
+                'message': 'Could not find any office with this filter'
+            }
+
+        if filter['available_now'] == True:
+            for office_id in db_offices['officeId']:
+                occupied_days = self.getOfficeOccupation(office_id, datetime.date.today().month)
+                if datetime.date.today().day in occupied_days['days']:
+                    index = db_offices['officeId'].index(office_id)
+                    for column in db_offices.values():
+                        column.pop(index)
+
+        return {
+            'success': True,
+            'offices': db_offices
+        }

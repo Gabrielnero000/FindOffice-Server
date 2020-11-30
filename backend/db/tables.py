@@ -23,13 +23,14 @@ TABLES['offices'] = (
     "CREATE TABLE offices ("
     "  officeId INT NOT NULL AUTO_INCREMENT,"
     "  landlordId INT NOT NULL,"
-    "  address NVARCHAR(300) NOT NULL,"
+    "  city NVARCHAR(300) NOT NULL,"
     "  district NVARCHAR(300) NOT NULL,"
     "  number NVARCHAR(5) NOT NULL,"
     "  description NVARCHAR(300) NOT NULL,"
+    "  daily_rate FLOAT NOT NULL,"
+    "  capacity INT NOT NULL,"
     "  scoring INT NOT NULL,"
     "  nScore INT NOT NULL,"
-    "  daily_rate FLOAT NOT NULL,"
     "  type VARCHAR(100) NOT NULL,"
     "  PRIMARY KEY (officeId))")
 

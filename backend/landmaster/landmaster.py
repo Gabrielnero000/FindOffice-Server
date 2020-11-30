@@ -45,13 +45,14 @@ class LandmasterApi(Api):
         update = (
             f"UPDATE offices "
             f"SET landlordId = '{office_info['landlordId']}', "
-            f"address = '{office_info['address']}', "
+            f"city = '{office_info['city']}', "
             f"district = '{office_info['district']}', "
             f"number = '{office_info['number']}', "
             f"description = '{office_info['description']}', "
+            f"daily_rate = '{office_info['daily_rate']}', "
+            f"capacity = '{office_info['capacity']}', "
             f"scoring = '{office_info['scoring']}', "
             f"nScore = '{office_info['nScore']}', "
-            f"daily_rate = '{office_info['daily_rate']}', "
             f"type = '{office_info['type']}' "
             f"WHERE officeId = {office_info['officeId']}")
 
