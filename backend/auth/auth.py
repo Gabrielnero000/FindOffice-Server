@@ -34,7 +34,7 @@ class AuthApi(Api):
             'error': None
         }
 
-    def singUp(self, user):
+    def signUp(self, user):
         cursor = self._db.getCursor()
 
         # Check if there is any users with that email
@@ -48,9 +48,8 @@ class AuthApi(Api):
             }
 
         # Insert user
-        insert_sql = "INSERT INTO users (name, email, password, legalPerson, cpf, cnpj, isTenant) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        values = (user['name'], user['email'], user['password'],
-                  user['isLegalPerson'], user['cpf'], user['cnpj'], user['isTenant'])
+        insert_sql = "INSERT INTO users (name, email, password, type) VALUES (%s, %s, %s, %s)"
+        values = (user['name'], user['email'], user['password'], user['type'])
         cursor.execute(insert_sql, values)
         self._db.commit()
 
