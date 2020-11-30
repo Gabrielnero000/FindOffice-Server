@@ -1,21 +1,23 @@
 from backend.tenant import TenantApi
 import fire
+import datetime
 
-def testGetOffices():
-    tenant_api = TenantApi()
+def testCheckIn():
+    user_api = TenantApi()
 
-    tenant_id = 0
-    print(tenant_api.getOffices(tenant_id))
+    rent_id = 0
+    print(user_api.checkIn(rent_id))
 
-def testexcludeOffice():
-    tenant_api = TenantApi()
+def testCheckOut():
+    user_api = TenantApi()
 
-    office_id = 0
-    print(tenant_api.excludeOffice(office_id))
+    rent_id = 0
+    print(user_api.checkOut(rent_id))
 
-def testModifyOffice():
-    tenant_api = TenantApi()
+def testGetOfficeOccupation():
+    user_api = TenantApi()
 
+<<<<<<< HEAD
     office_info = {
         'officeId': 0,
         'ownerId': 0,
@@ -26,6 +28,25 @@ def testModifyOffice():
         
     }
     print(tenant_api.modifyOffice(office_info))
+=======
+    id_office=0
+    month=7
+    print(user_api.getOfficeOccupation(id_office, month))
+
+def testRent():
+    user_api = TenantApi()
+
+    id_office = 0
+    id_tenant = 0
+    days = [datetime.datetime(2020,10,20), datetime.datetime(2020,10,21), datetime.datetime(2020,10,22)]
+    print(user_api.rent(id_office, id_tenant, days))
+
+def testGet_all_offices():
+    user_api = TenantApi()
+
+    #Quando puder adicionar imóveis testo novamente
+    print(user_api.get_all_offices())
+>>>>>>> main
 
 if __name__ == "__main__":
     fire.Fire()
