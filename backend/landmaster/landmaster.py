@@ -75,3 +75,27 @@ class LandmasterApi(Api):
             'success': True,
             'office': db_office_post
         }
+
+    def addOffice(self, office):
+        cursor = self._db.getCursor()
+
+        sql = "INSERT INTO offices (landlordId, address, district, number, description, scoring, nScore, daily_rate, type) VALUES (%s, %s, %s, %s, %s, %s, %s, %f, %s)"
+        values = (office['id_landlord'], office['address'], office['district'],
+                  office['number'], office['descripition'], 0, 0, office['daily_rate'], office['type'])
+        cursor.execute(sql, values) 
+        self._db.commit()
+
+        query_sql = "SELECT * FROM offices WHERE officeId = last_insert_id()"
+        cursor.execute(query_sql)
+        db_office = cursor.fetchone()
+        if db_office is None
+            return {
+                'success': False
+                'error': 'Erro ao inserir'
+            }
+
+	    return {
+            'success':True,
+            'office': db_office,
+            'error':None
+        }
