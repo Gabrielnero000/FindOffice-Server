@@ -4,10 +4,10 @@ class LandmasterApi(Api):
     def __init__(self):
         super().__init__()
 
-    def getOffices(self, id_tenant):
+    def getOffices(self, id_landlord):
         cursor = self._db.getCursor()
 
-        sql = f"SELECT * FROM offices WHERE ownerId = '{id_tenant}'"
+        sql = f"SELECT * FROM offices WHERE landlordId = '{id_landlord}'"
         cursor.execute(sql)
 
         return {
@@ -44,13 +44,15 @@ class LandmasterApi(Api):
 
         update = (
             f"UPDATE offices "
-            f"SET ownerId = '{office_info['ownerId']}', "
+            f"SET landlordId = '{office_info['landlordId']}', "
             f"address = '{office_info['address']}', "
             f"district = '{office_info['district']}', "
             f"number = '{office_info['number']}', "
-            f"extra = '{office_info['extra']}', "
+            f"description = '{office_info['description']}', "
             f"scoring = '{office_info['scoring']}', "
-            f"nScore = '{office_info['nScore']}' "
+            f"nScore = '{office_info['nScore']}', "
+            f"daily_rate = '{office_info['daily_rate']}', "
+            f"type = '{office_info['type']}' "
             f"WHERE officeId = {office_info['officeId']}")
 
         cursor.execute(update)

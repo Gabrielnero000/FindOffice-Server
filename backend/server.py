@@ -19,7 +19,7 @@ def login():
 @app.route('/auth/sign_up', methods=['POST'])
 def sign_up():
     data = request.json
-    return jsonify(auth_api.singUp(data['user']))
+    return jsonify(auth_api.signUp(data['user']))
 
 @app.route('/tenant/get_offices', methods=['POST'])
 def get_offices():
@@ -60,7 +60,7 @@ def rent():
 def get_all_offices():
     data = request.json
     return jsonify(tenant_api.get_all_offices())
-    
+
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)
 
