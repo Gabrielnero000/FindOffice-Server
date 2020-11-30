@@ -17,18 +17,6 @@ def testCheckOut():
 def testGetOfficeOccupation():
     user_api = TenantApi()
 
-<<<<<<< HEAD
-    office_info = {
-        'officeId': 0,
-        'ownerId': 0,
-        'address': 'rua',
-        'district': 'dist',
-        'number': '123',
-        'extra': 'oi',
-        
-    }
-    print(tenant_api.modifyOffice(office_info))
-=======
     id_office=0
     month=7
     print(user_api.getOfficeOccupation(id_office, month))
