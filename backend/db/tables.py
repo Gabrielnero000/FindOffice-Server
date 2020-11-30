@@ -25,6 +25,7 @@ TABLES['offices'] = (
     "  landlordId INT NOT NULL,"
     "  city NVARCHAR(300) NOT NULL,"
     "  district NVARCHAR(300) NOT NULL,"
+    "  address NVARCHAR(300) NOT NULL,"
     "  number NVARCHAR(5) NOT NULL,"
     "  description NVARCHAR(300) NOT NULL,"
     "  daily_rate FLOAT NOT NULL,"

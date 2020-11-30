@@ -46,7 +46,7 @@ def testSearchOffices():
         'capacity': 0,
         'min_price': 0,
         'max_price': 9999,
-        'order_by': 'daily_rate',
+        'order_by': 'price',
         'available_now': True
     }
     print(user_api.searchOffices(filter))

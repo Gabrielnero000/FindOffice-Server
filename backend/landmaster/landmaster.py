@@ -47,6 +47,7 @@ class LandmasterApi(Api):
             f"SET landlordId = '{office_info['landlordId']}', "
             f"city = '{office_info['city']}', "
             f"district = '{office_info['district']}', "
+            f"address = '{office_info['address']}', "
             f"number = '{office_info['number']}', "
             f"description = '{office_info['description']}', "
             f"daily_rate = '{office_info['daily_rate']}', "

@@ -21,6 +21,7 @@ def testModifyOffice():
         'landlordId': 0,
         'city': 'joao pessoa',
         'district': 'mangabeira',
+        'address': 'rua x',
         'number': 123,
         'description': 'desc',
         'daily_rate': 400.0,

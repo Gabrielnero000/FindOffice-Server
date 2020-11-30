@@ -149,7 +149,8 @@ class TenantApi(Api):
             f"AND district LIKE '%{filter['district']}%' "
             f"AND capacity >= '{filter['capacity']}' "
             f"AND (daily_rate BETWEEN '{filter['min_price']}' AND '{filter['max_price']}') "
-            f"ORDER BY {filter['order_by']} DESC")
+            f"ORDER BY (CASE WHEN '{filter['order_by']}' = 'price' THEN daily_rate END) ASC, "
+            f"(CASE WHEN '{filter['order_by']}' = 'score' THEN scoring END) DESC")
         cursor.execute(sql)
         db_offices = cursor.fetchall()
 
