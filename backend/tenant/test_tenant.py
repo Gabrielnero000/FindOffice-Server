@@ -40,13 +40,11 @@ def testSearchOffices():
 
     filter = {
         'description': "",
-        'type': "oie",
         'city': None,
         'district': "",
         'capacity': 0,
         'min_price': 0.,
         'max_price': 999.,
-        'order_by': 'arroz',
         'available_now': True
     }
     print(user_api.searchOffices(filter))
