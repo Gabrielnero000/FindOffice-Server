@@ -138,26 +138,3 @@ class TenantApi(Api):
             'offices': cursor.fetchall()
         }
 
-    def addOffice(self, office):
-        cursor = self._db.getCursor()
-
-        sql = "INSERT INTO offices (ownerId, address, district, number, extra, scoring, nScore) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        values = (office['id_owner'], office['address'], office['district'],
-                  office['number'], office['extra'], 0, 0)
-        cursor.execute(sql, values)
-        self._db.commit()
-
-        query_sql = "SELECT * FROM offices WHERE officeId = last_insert_id()"
-        cursor.execute(query_sql)
-        db_office = cursor.fetchone()
-        if db_office is None
-        return {
-            'success': False
-            'error': 'Erro ao inserir'
-        }
-        
-	return {
-            'success':True,
-            'office': db_office,
-            'error':None
-    }

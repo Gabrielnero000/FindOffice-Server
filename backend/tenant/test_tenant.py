@@ -34,7 +34,6 @@ def testGet_all_offices():
 
     #Quando puder adicionar imóveis testo novamente
     print(user_api.get_all_offices())
->>>>>>> main
 
 if __name__ == "__main__":
     fire.Fire()
