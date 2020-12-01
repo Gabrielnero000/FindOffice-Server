@@ -30,5 +30,19 @@ def testModifyOffice():
     }
     print(tenant_api.modifyOffice(office_info))
 
+def testAddOffice():
+    tenant_api = LandmasterApi()
+
+    office = {
+        'id_landlord': 1,
+        'addres': 'João Pessoa, Bancarios, Rua dos Ipes',
+        'district': 'Paraiba',
+        'number': '50',
+        'description': 'Lugar bonito',
+        'daily_rate': 5.0,
+        'type': 'Residencial'
+    }
+    print(tenant_api.addOffice(office))
+
 if __name__ == "__main__":
     fire.Fire()
