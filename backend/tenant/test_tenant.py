@@ -40,7 +40,7 @@ def testSearchOffices():
 
     filter = {
         'description': "",
-        'type': "",
+        'type': "business",
         'city': "",
         'district': "",
         'capacity': 0,

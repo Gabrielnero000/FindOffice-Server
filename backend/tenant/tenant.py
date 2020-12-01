@@ -141,34 +141,41 @@ class TenantApi(Api):
     def searchOffices(self, filter):
         cursor = self._db.getCursor()
 
-        sql = (
-            f"SELECT * FROM offices "
-            f"WHERE description LIKE '%{filter['description']}%' "
-            f"AND type LIKE '%{filter['type']}%' "
-            f"AND city LIKE '%{filter['city']}%' "
-            f"AND district LIKE '%{filter['district']}%' "
-            f"AND capacity >= '{filter['capacity']}' "
-            f"AND (daily_rate BETWEEN '{filter['min_price']}' AND '{filter['max_price']}') "
-            f"ORDER BY (CASE WHEN '{filter['order_by']}' = 'price' THEN daily_rate END) ASC, "
-            f"(CASE WHEN '{filter['order_by']}' = 'score' THEN scoring END) DESC")
-        cursor.execute(sql)
-        db_offices = cursor.fetchall()
+        if (type(filter['description']) == str and (filter['type'] == 'business'
+            or filter['type'] == 'residential') and type(filter['city']) == str
+            and type(filter['district']) == str and filter['capacity'] >= 0
+            and (filter['min_price'] >= 0 and filter['max_price'] >= filter['min_price'])
+            and (filter['order_by'] == 'score' or filter['order_by'] == 'price')
+            and type(filter['available_now']) == bool):
 
-        if len(db_offices) == 0:
+            sql = (
+                f"SELECT * FROM offices "
+                f"WHERE description LIKE '%{filter['description']}%' "
+                f"AND type LIKE '%{filter['type']}%' "
+                f"AND city LIKE '%{filter['city']}%' "
+                f"AND district LIKE '%{filter['district']}%' "
+                f"AND capacity >= '{filter['capacity']}' "
+                f"AND (daily_rate BETWEEN '{filter['min_price']}' AND '{filter['max_price']}') "
+                f"ORDER BY (CASE WHEN '{filter['order_by']}' = 'price' THEN daily_rate END) ASC, "
+                f"(CASE WHEN '{filter['order_by']}' = 'score' THEN scoring END) DESC")
+            cursor.execute(sql)
+            db_offices = cursor.fetchall()
+
+            if filter['available_now'] == True and len(db_offices) > 0:
+                for office_id in db_offices['officeId']:
+                    occupied_days = self.getOfficeOccupation(office_id, datetime.date.today().month)
+                    if datetime.date.today().day in occupied_days['days']:
+                        index = db_offices['officeId'].index(office_id)
+                        for column in db_offices.values():
+                            column.pop(index)
+
             return {
-                'success': True,
-                'message': 'Could not find any office with this filter'
-            }
-
-        if filter['available_now'] == True:
-            for office_id in db_offices['officeId']:
-                occupied_days = self.getOfficeOccupation(office_id, datetime.date.today().month)
-                if datetime.date.today().day in occupied_days['days']:
-                    index = db_offices['officeId'].index(office_id)
-                    for column in db_offices.values():
-                        column.pop(index)
-
-        return {
             'success': True,
             'offices': db_offices
-        }
+            }
+
+        else:
+            return{
+                'success': False,
+                'error': 'One or more of the filter keys are invalid'
+            }
