@@ -4,10 +4,10 @@ class LandmasterApi(Api):
     def __init__(self):
         super().__init__()
 
-    def getOffices(self, id_landlord):
+    def getOffices(self, id_landmaster):
         cursor = self._db.getCursor()
 
-        sql = f"SELECT * FROM offices WHERE landlordId = '{id_landlord}'"
+        sql = f"SELECT * FROM offices WHERE landmasterId = '{id_landmaster}'"
         cursor.execute(sql)
 
         return {
@@ -44,7 +44,6 @@ class LandmasterApi(Api):
 
         update = (
             f"UPDATE offices "
-            f"SET landlordId = '{office_info['landlordId']}', "
             f"city = '{office_info['city']}', "
             f"district = '{office_info['district']}', "
             f"address = '{office_info['address']}', "
@@ -81,8 +80,8 @@ class LandmasterApi(Api):
     def addOffice(self, office):
         cursor = self._db.getCursor()
 
-        sql = "INSERT INTO offices (landlordId, address, district, number, description, scoring, nScore, daily_rate, type) VALUES (%s, %s, %s, %s, %s, %s, %s, %f, %s)"
-        values = (office['id_landlord'], office['address'], office['district'],
+        sql = "INSERT INTO offices (landmasterId, address, district, number, description, scoring, nScore, daily_rate, type) VALUES (%s, %s, %s, %s, %s, %s, %s, %f, %s)"
+        values = (office['landmasterId'], office['address'], office['district'],
                   office['number'], office['descripition'], 0, 0, office['daily_rate'], office['type'])
         cursor.execute(sql, values)
         self._db.commit()

@@ -18,7 +18,7 @@ def testModifyOffice():
 
     office_info = {
         'officeId': 0,
-        'landlordId': 0,
+        'landmasterId': 0,
         'city': 'joao pessoa',
         'district': 'mangabeira',
         'address': 'rua x',
@@ -36,7 +36,7 @@ def testAddOffice():
     tenant_api = LandmasterApi()
 
     office = {
-        'id_landlord': 1,
+        'landmasterId': 1,
         'addres': 'João Pessoa, Bancarios, Rua dos Ipes',
         'district': 'Paraiba',
         'number': '50',

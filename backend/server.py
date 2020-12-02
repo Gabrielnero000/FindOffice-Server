@@ -13,7 +13,7 @@ landmaster_api = LandmasterApi()
 @app.route('/auth/login', methods=['POST'])
 def login():
     data = request.json
-    return jsonify(auth_api.login(data['email'], data['password']))
+    return jsonify(auth_api.login(data['email'], data['password'], data['type']))
 
 
 @app.route('/auth/sign_up', methods=['POST'])
@@ -54,7 +54,7 @@ def get_office_occupation():
 @app.route('/tenant/rent', methods=['POST'])
 def rent():
     data = request.json
-    return jsonify(tenant_api.rent(data['office_id'], data['user_id'], data['rent_days']))
+    return jsonify(tenant_api.rent(data['office_id'], data['tenant_id'], data['rent_days']))
 
 @app.route('/tenant/get_all_offices', methods=['GET'])
 def get_all_offices():
@@ -64,7 +64,7 @@ def get_all_offices():
 @app.route('/tenant/search_offices', methods=['GET'])
 def search_offices():
     data = request.json
-    return jsonify(tenant_api.searchOffices(data['office']))
+    return jsonify(tenant_api.searchOffices(data['filter']))
 
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)

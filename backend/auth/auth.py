@@ -5,11 +5,11 @@ class AuthApi(Api):
     def __init__(self):
         super().__init__()
 
-    def login(self, email, password):
+    def login(self, email, password, user_type):
         cursor = self._db.getCursor()
 
         # Check if there is any users with that email
-        query_sql = f"SELECT * FROM users WHERE email = '{email}'"
+        query_sql = f"SELECT * FROM {user_type} WHERE email = '{email}'"
         cursor.execute(query_sql)
         db_user = cursor.fetchone()
 
@@ -17,7 +17,7 @@ class AuthApi(Api):
             return {
                 'success': False,
                 'user': None,
-                'error': 'Email not found'
+                'error': f'There is no {user_type} with that email'
             }
 
         # Check password
@@ -28,6 +28,7 @@ class AuthApi(Api):
                 'error': 'Wrong password'
             }
 
+        db_user['type'] = user_type
         return {
             'success': True,
             'user': db_user,
@@ -38,7 +39,7 @@ class AuthApi(Api):
         cursor = self._db.getCursor()
 
         # Check if there is any users with that email
-        query_sql = f"SELECT * FROM users WHERE email = '{user['email']}'"
+        query_sql = f"SELECT * FROM {user['type']} WHERE email = '{user['email']}'"
         cursor.execute(query_sql)
         if cursor.fetchone() is not None:
             return {
@@ -48,15 +49,18 @@ class AuthApi(Api):
             }
 
         # Insert user
-        insert_sql = "INSERT INTO users (name, email, password, type) VALUES (%s, %s, %s, %s)"
-        values = (user['name'], user['email'], user['password'], user['type'])
-        cursor.execute(insert_sql, values)
+        insert_sql = (
+            f"INSERT INTO {user['type']} (name, email, password)"
+            f"VALUES ('{user['name']}', '{user['email']}', '{user['password']}')"
+        )
+        cursor.execute(insert_sql)
         self._db.commit()
 
         # Return inserted user
-        query_sql = "SELECT * FROM users WHERE userId = last_insert_id()"
+        query_sql = f"SELECT * FROM {user['type']} WHERE {user['type']+'Id'} = last_insert_id()"
         cursor.execute(query_sql)
         db_user = cursor.fetchone()
+        db_user['type'] = user['type']
 
         return {
             'success': True,
