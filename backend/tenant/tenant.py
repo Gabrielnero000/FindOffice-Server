@@ -138,3 +138,62 @@ class TenantApi(Api):
             'offices': cursor.fetchall()
         }
 
+    def searchOffices(self, filter):
+        cursor = self._db.getCursor()
+
+        def conjunction(sql_string):
+            if sql_string == "SELECT * FROM offices ":
+                conj = "WHERE "
+            else:
+                conj = "AND "
+
+            return conj
+
+        sql = "SELECT * FROM offices "
+
+        if 'description' in filter and type(filter['description']) == str:
+            sql += conjunction(sql)
+            sql += f"description LIKE '%{filter['description']}%' "
+
+        if 'type' in filter and (filter['type'] == 'business' or filter['type'] == 'residential'):
+            sql += conjunction(sql)
+            sql += f"type LIKE '%{filter['type']}%' "
+
+        if 'city' in filter and type(filter['city']) == str:
+            sql += conjunction(sql)
+            sql += f"city LIKE '%{filter['city']}%' "
+
+        if 'district' in filter and type(filter['district']) == str:
+            sql += conjunction(sql)
+            sql += f"district LIKE '%{filter['district']}%' "
+
+        if 'capacity' in filter and type(filter['capacity']) == int and filter['capacity'] >= 0:
+            sql += conjunction(sql)
+            sql += f"capacity >= {filter['capacity']} "
+
+        if ('min_price' in filter and type(filter['min_price']) == float and filter['min_price'] >= 0
+            and 'max_price' in filter and type(filter['max_price']) == float
+            and filter['max_price'] >= filter['min_price']):
+            sql += conjunction(sql)
+            sql += f"(daily_rate BETWEEN {filter['min_price']} AND {filter['max_price']}) "
+
+        if 'order_by' in filter and (filter['order_by'] == 'score' or filter['order_by'] == 'price'):
+            sql += (
+                f"ORDER BY (CASE WHEN '{filter['order_by']}' = 'price' THEN daily_rate END) ASC, "
+                f"(CASE WHEN '{filter['order_by']}' = 'score' THEN scoring END) DESC")
+
+        cursor.execute(sql)
+        db_offices = cursor.fetchall()
+
+        if 'available_now' in filter and filter['available_now'] == True and len(db_offices) > 0:
+            for office_id in db_offices['officeId']:
+                occupied_days = self.getOfficeOccupation(office_id, datetime.date.today().month)
+                if datetime.date.today().day in occupied_days['days']:
+                    index = db_offices['officeId'].index(office_id)
+                    for column in db_offices.values():
+                        column.pop(index)
+
+        return {
+            'success': True,
+            'offices': db_offices
+        }

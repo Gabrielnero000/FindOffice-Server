@@ -45,13 +45,15 @@ class LandmasterApi(Api):
         update = (
             f"UPDATE offices "
             f"SET landlordId = '{office_info['landlordId']}', "
-            f"address = '{office_info['address']}', "
+            f"city = '{office_info['city']}', "
             f"district = '{office_info['district']}', "
+            f"address = '{office_info['address']}', "
             f"number = '{office_info['number']}', "
             f"description = '{office_info['description']}', "
+            f"daily_rate = '{office_info['daily_rate']}', "
+            f"capacity = '{office_info['capacity']}', "
             f"scoring = '{office_info['scoring']}', "
             f"nScore = '{office_info['nScore']}', "
-            f"daily_rate = '{office_info['daily_rate']}', "
             f"type = '{office_info['type']}' "
             f"WHERE officeId = {office_info['officeId']}")
 
@@ -82,20 +84,21 @@ class LandmasterApi(Api):
         sql = "INSERT INTO offices (landlordId, address, district, number, description, scoring, nScore, daily_rate, type) VALUES (%s, %s, %s, %s, %s, %s, %s, %f, %s)"
         values = (office['id_landlord'], office['address'], office['district'],
                   office['number'], office['descripition'], 0, 0, office['daily_rate'], office['type'])
-        cursor.execute(sql, values) 
+        cursor.execute(sql, values)
         self._db.commit()
 
         query_sql = "SELECT * FROM offices WHERE officeId = last_insert_id()"
         cursor.execute(query_sql)
         db_office = cursor.fetchone()
-        if db_office is None
+
+        if db_office is None:
             return {
-                'success': False
+                'success': False,
                 'error': 'Erro ao inserir'
             }
 
-	    return {
-            'success':True,
+        return {
+            'success': True,
             'office': db_office,
-            'error':None
+            'error': None
         }

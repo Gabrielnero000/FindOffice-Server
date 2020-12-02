@@ -21,45 +21,50 @@ def sign_up():
     data = request.json
     return jsonify(auth_api.signUp(data['user']))
 
-@app.route('/tenant/get_offices', methods=['POST'])
+@app.route('/landmaster/get_offices', methods=['POST'])
 def get_offices():
     data = request.json
     return jsonify(landmaster_api.getOffices(data['tenant_id']))
 
-@app.route('/tenant/exclude_office', methods=['POST'])
+@app.route('/landmaster/exclude_office', methods=['POST'])
 def exclude_office():
     data = request.json
     return jsonify(landmaster_api.excludeOffice(data['office_id']))
 
-@app.route('/tenant/modify_office', methods=['POST'])
+@app.route('/landmaster/modify_office', methods=['POST'])
 def modify_office():
     data = request.json
     return jsonify(landmaster_api.modifyOffice(data['office']))
 
-@app.route('/user/check_in', methods=['POST'])
+@app.route('/tenant/check_in', methods=['POST'])
 def check_in():
     data = request.json
     return jsonify(tenant_api.checkIn(data['rent_id']))
 
-@app.route('/user/check_out', methods=['POST'])
+@app.route('/tenant/check_out', methods=['POST'])
 def check_out():
     data = request.json
     return jsonify(tenant_api.checkOut(data['rent_id']))
 
-@app.route('/user/get_office_occupation', methods=['POST'])
+@app.route('/tenant/get_office_occupation', methods=['POST'])
 def get_office_occupation():
     data = request.json
     return jsonify(tenant_api.getOfficeOccupation(data['office_id'], data['month']))
 
-@app.route('/user/rent', methods=['POST'])
+@app.route('/tenant/rent', methods=['POST'])
 def rent():
     data = request.json
     return jsonify(tenant_api.rent(data['office_id'], data['user_id'], data['rent_days']))
 
-@app.route('/user/get_all_offices', methods=['GET'])
+@app.route('/tenant/get_all_offices', methods=['GET'])
 def get_all_offices():
     data = request.json
     return jsonify(tenant_api.get_all_offices())
+
+@app.route('/tenant/search_offices', methods=['GET'])
+def search_offices():
+    data = request.json
+    return jsonify(tenant_api.searchOffices(data['office']))
 
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)
