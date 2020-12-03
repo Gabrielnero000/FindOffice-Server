@@ -111,12 +111,12 @@ class TenantApi(Api):
             'days': occupied_days
         }
 
-    def rent(self, id_office, id_tenant, rent_days):
+    def rent(self, id_office, id_tenant, rent_days, scoring):
         cursor = self._db.getCursor()
 
         insert = (
-            f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd)"
-            f"VALUES ('{id_office}', '{id_tenant}', '{rent_days[0]}', '{rent_days[-1]}')")
+            f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd, scoring)"00
+            f"VALUES ('{id_office}', '{id_tenant}', '{rent_days[0]}', '{rent_days[-1]}', '{NULL}')")
         cursor.execute(insert)
 
         select = f"SELECT * FROM rents WHERE rentId = LAST_INSERT_ID()"
@@ -196,4 +196,52 @@ class TenantApi(Api):
         return {
             'success': True,
             'offices': db_offices
+        }
+
+    def get_rents(self, id_user){
+        cursor = self._db.getCursor()
+
+        sql = f"SELECT * FROM rents WHERE userId = '{id_user}'"
+        cursor.execute(sql)
+        my_rents = cursor.fetchall()
+
+        no_checkIn = []
+        no_checkOut = []
+        no_scoring = []
+        past_rents = []
+
+        if(my_rents is None):
+
+            return{
+                'success': False
+                'warning': 'User not found or user with no past rents'
+            }
+
+        else:
+
+            for rent in my_rents:
+
+                if(rent['checkIn'] == 'None'):
+                    no_checkIn.append(rent)
+
+                elif(rent['checkOut'] == 'None'):
+                    no_checkOut.append(rent) 
+
+                elif(rent['scoring'] == 'None'): 
+                    no_scoring.append(rent) 
+
+                else: 
+                    past_rents.append(rent) 
+
+
+        rents = {
+            'no_checkIn': no_checkIn,
+            'no_checkOut': no_checkOut,
+            'no_scoring': no_scoring,
+            'past_rents': past_rents
+        }                     
+
+        return{
+            'success': True
+            'rents': rents
         }
