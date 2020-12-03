@@ -87,24 +87,17 @@ class TenantApi(Api):
         sql = (
             f"SELECT bookingStart, bookingEnd FROM rents "
             f"WHERE officeId = '{id_office}' "
-            f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}')")
+            f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}') "
+            f"ORDER BY bookingStart")
         cursor.execute(sql)
         db_rents = cursor.fetchall()
 
-        if len(db_rents) == 0:
-            return {
-                'success': True,
-                'message': "All days are vacant in this month"
-            }
-
         occupied_days = []
-        for start, end in zip(db_rents['bookingStart'], db_rents['bookingEnd']):
-            if start.month < month:
-                occupied_days.extend(range(1, end.day+1))
-            elif end.month > month:
-                occupied_days.extend(range(start.day, monthrange(start.year, start.month)[1]+1))
-            else:
-                occupied_days.extend(range(start.day, end.day+1))
+        if len(db_rents) > 0:
+            for start, end in zip(db_rents['bookingStart'], db_rents['bookingEnd']):
+                occupied_days.extend([(start + datetime.timedelta(days=x)).isoformat()
+                                    for x in range((end-start).days + 1)
+                                    if (start + datetime.timedelta(days=x)).month == month])
 
         return {
             'success': True,
@@ -188,7 +181,7 @@ class TenantApi(Api):
         if 'available_now' in filter and filter['available_now'] == True and len(db_offices) > 0:
             for office_id in db_offices['officeId']:
                 occupied_days = self.getOfficeOccupation(office_id, datetime.date.today().month)
-                if datetime.date.today().day in occupied_days['days']:
+                if datetime.date.today().isoformat() in occupied_days['days']:
                     index = db_offices['officeId'].index(office_id)
                     for column in db_offices.values():
                         column.pop(index)

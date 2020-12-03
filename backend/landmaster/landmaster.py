@@ -43,7 +43,8 @@ class LandmasterApi(Api):
         db_office_pre = cursor.fetchone()
 
         update = (
-            f"UPDATE offices "
+            f"UPDATE offices SET "
+            f"landmasterId = {office_info['landmasterId']}"
             f"city = '{office_info['city']}', "
             f"district = '{office_info['district']}', "
             f"address = '{office_info['address']}', "
