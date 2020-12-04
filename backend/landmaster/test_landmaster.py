@@ -37,11 +37,13 @@ def testAddOffice():
 
     office = {
         'landmasterId': 1,
-        'addres': 'João Pessoa, Bancarios, Rua dos Ipes',
-        'district': 'Paraiba',
+        'city': 'JP',
+        'district': 'bancarios',
+        'address': 'Rua dos Ipes',
         'number': '50',
         'description': 'Lugar bonito',
-        'daily_rate': 5.0,
+        'daily_rate': 50.0,
+        'capacity': 200,
         'type': 'Residencial'
     }
     print(tenant_api.addOffice(office))

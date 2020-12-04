@@ -81,9 +81,9 @@ class LandmasterApi(Api):
     def addOffice(self, office):
         cursor = self._db.getCursor()
 
-        sql = "INSERT INTO offices (landmasterId, address, district, number, description, scoring, nScore, daily_rate, type) VALUES (%s, %s, %s, %s, %s, %s, %s, %f, %s)"
-        values = (office['landmasterId'], office['address'], office['district'],
-                  office['number'], office['descripition'], 0, 0, office['daily_rate'], office['type'])
+        sql = "INSERT INTO offices (landmasterId, city, district, address, number, description, daily_rate, capacity, scoring, nScore, type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (office['landmasterId'], office['city'], office['district'], office['address'],
+                  office['number'], office['description'], office['daily_rate'], office['capacity'], 0, 0, office['type'])
         cursor.execute(sql, values)
         self._db.commit()
 
