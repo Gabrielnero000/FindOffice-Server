@@ -137,4 +137,3 @@ class TenantApi(Api):
             'success': True,
             'offices': cursor.fetchall()
         }
-
