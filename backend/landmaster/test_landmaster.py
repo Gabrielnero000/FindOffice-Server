@@ -46,5 +46,11 @@ def testAddOffice():
     }
     print(tenant_api.addOffice(office))
 
+def testGetMonthRents():
+    landmaster_api = LandmasterApi()
+
+    id_landmaster = 0
+    print(landmaster_api.getMonthRents(id_landmaster))
+
 if __name__ == "__main__":
     fire.Fire()

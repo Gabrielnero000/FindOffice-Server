@@ -1,8 +1,6 @@
 from backend.api import Api
 
 import datetime
-from calendar import monthrange
-
 
 class TenantApi(Api):
     def __init__(self):
