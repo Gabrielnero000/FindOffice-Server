@@ -35,5 +35,19 @@ def testGet_all_offices():
     #Quando puder adicionar imóveis testo novamente
     print(user_api.get_all_offices())
 
+def testSearchOffices():
+    user_api = TenantApi()
+
+    filter = {
+        'description': "",
+        'city': None,
+        'district': "",
+        'capacity': 0,
+        'min_price': 0.,
+        'max_price': 999.,
+        'available_now': True
+    }
+    print(user_api.searchOffices(filter))
+
 if __name__ == "__main__":
     fire.Fire()
