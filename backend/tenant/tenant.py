@@ -115,7 +115,7 @@ class TenantApi(Api):
         cursor = self._db.getCursor()
 
         insert = (
-            f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd, scoring)"00
+            f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd, scoring)"
             f"VALUES ('{id_office}', '{id_tenant}', '{rent_days[0]}', '{rent_days[-1]}', '{NULL}')")
         cursor.execute(insert)
 
