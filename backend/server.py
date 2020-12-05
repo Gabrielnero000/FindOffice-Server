@@ -71,6 +71,11 @@ def search_offices():
     data = request.json
     return jsonify(tenant_api.searchOffices(data['filter']))
 
+@app.route('/landmaster/get_month_rents', methods=['POST'])
+def get_month_rents():
+    data = request.json
+    return jsonify(landmaster_api.getMonthRents(data['id_landmaster']))
+
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)
 

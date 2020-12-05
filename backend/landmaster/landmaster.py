@@ -1,5 +1,7 @@
 from backend.api import Api
 
+import datetime
+
 class LandmasterApi(Api):
     def __init__(self):
         super().__init__()
@@ -82,8 +84,8 @@ class LandmasterApi(Api):
         cursor = self._db.getCursor()
 
         sql = "INSERT INTO offices (landmasterId, city, district, address, number, description, daily_rate, capacity, scoring, nScore, type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        values = (office['landmasterId'], office['city'], office['district'],
-                  office['address'], office['number'], office['description'], office['daily_rate'], office['capacity'], 0, 0, office['type'])
+        values = (office['landmasterId'], office['city'], office['district'], office['address'],
+                  office['number'], office['description'], office['daily_rate'], office['capacity'], 0, 0, office['type'])
         cursor.execute(sql, values)
         self._db.commit()
 
@@ -103,12 +105,36 @@ class LandmasterApi(Api):
             'error': None
         }
 
+    def getMonthRents(self, id_landmaster):
+        cursor = self._db.getCursor()
+
+        sql_offices = f"SELECT officeId FROM offices WHERE landmasterId = '{id_landmaster}'"
+        cursor.execute(sql_offices)
+        db_offices = cursor.fetchall()
+
+        if len(db_offices) == 0:
+            return{
+                'success': False,
+                'error': 'Could not find any office with this landmasterId'
+            }
+
+        month = datetime.date.today().month
+
+        sql_rents = (
+            f"SELECT * FROM rents WHERE officeId IN {*db_offices['officeId'],} "
+            f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}') "
+            f"ORDER BY bookingStart")
+        cursor.execute(sql_rents)
+        db_rents = cursor.fetchall()
+
+        return {
+            'success': True,
+            'rents': db_rents
+        }
     def top_score_office(self,id_landmaster):
         cursor = self._db.getCursor()
 
         sql = f"SELECT officeId FROM offices WHERE landmasterId = '{id_landmaster}'"
         cursor.execute(sql)
         offices = cursor.fetchall()
-        for office in offices:
-            print(office.scoring)
 

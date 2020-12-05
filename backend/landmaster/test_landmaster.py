@@ -37,13 +37,13 @@ def testAddOffice():
 
     office = {
         'landmasterId': 1,
-        'city': 'João Pessoa',
-        'district': 'Paraiba',
+        'city': 'JP',
+        'district': 'bancarios',
         'address': 'Rua dos Ipes',
         'number': '50',
         'description': 'Lugar bonito',
-        'daily_rate': 5.0,
-        'capacity':20,
+        'daily_rate': 50.0,
+        'capacity': 200,
         'type': 'Residencial'
     }
     landmaster_api.addOffice(office)
@@ -80,6 +80,12 @@ def testTop_score_office():
     id_landmaster = 1
     print(landmaster_api.top_score_office(id_landmaster))
 
+
+def testGetMonthRents():
+    landmaster_api = LandmasterApi()
+
+    id_landmaster = 0
+    print(landmaster_api.getMonthRents(id_landmaster))
 
 if __name__ == "__main__":
     fire.Fire()
