@@ -1,5 +1,7 @@
 from backend.api import Api
 
+import datetime
+
 class LandmasterApi(Api):
     def __init__(self):
         super().__init__()
@@ -101,4 +103,31 @@ class LandmasterApi(Api):
             'success': True,
             'office': db_office,
             'error': None
+        }
+
+    def getMonthRents(self, id_landmaster):
+        cursor = self._db.getCursor()
+
+        sql_offices = f"SELECT officeId FROM offices WHERE landmasterId = '{id_landmaster}'"
+        cursor.execute(sql_offices)
+        db_offices = cursor.fetchall()
+
+        if len(db_offices) == 0:
+            return{
+                'success': False,
+                'error': 'Could not find any office with this landmasterId'
+            }
+
+        month = datetime.date.today().month
+
+        sql_rents = (
+            f"SELECT * FROM rents WHERE officeId IN {*db_offices['officeId'],} "
+            f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}') "
+            f"ORDER BY bookingStart")
+        cursor.execute(sql_rents)
+        db_rents = cursor.fetchall()
+
+        return {
+            'success': True,
+            'rents': db_rents
         }
