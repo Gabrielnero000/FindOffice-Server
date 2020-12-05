@@ -33,18 +33,53 @@ def testModifyOffice():
     print(tenant_api.modifyOffice(office_info))
 
 def testAddOffice():
-    tenant_api = LandmasterApi()
+    landmaster_api = LandmasterApi()
 
     office = {
         'landmasterId': 1,
-        'addres': 'João Pessoa, Bancarios, Rua dos Ipes',
+        'city': 'João Pessoa',
         'district': 'Paraiba',
+        'address': 'Rua dos Ipes',
         'number': '50',
         'description': 'Lugar bonito',
         'daily_rate': 5.0,
+        'capacity':20,
         'type': 'Residencial'
     }
-    print(tenant_api.addOffice(office))
+    landmaster_api.addOffice(office)
+
+def testTop_score_office():
+    landmaster_api = LandmasterApi()
+
+    # office = {
+    #     'landmasterId': 1,
+    #     'city': 'João Pessoa',
+    #     'district': 'Paraiba',
+    #     'address': 'Rua dos Ipes',
+    #     'number': '50',
+    #     'description': 'Lugar bonito',
+    #     'daily_rate': 10.0,
+    #     'capacity':20,
+    #     'type': 'Residencial'
+    # }
+    # office2 = {
+    #     'landmasterId': 0,
+    #     'city': 'João Pessoa',
+    #     'district': 'Paraiba',
+    #     'address': 'Rua dos Ipes',
+    #     'number': '50',
+    #     'description': 'Lugar bonito',
+    #     'daily_rate': 3.0,
+    #     'capacity':20,
+    #     'type': 'Residencial'
+    # }
+
+    # landmaster_api.addOffice(office)
+    # landmaster_api.addOffice(office2)
+    
+    id_landmaster = 1
+    print(landmaster_api.top_score_office(id_landmaster))
+
 
 if __name__ == "__main__":
     fire.Fire()
