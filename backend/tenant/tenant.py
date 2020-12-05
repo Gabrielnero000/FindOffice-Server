@@ -221,13 +221,13 @@ class TenantApi(Api):
 
             for rent in my_rents:
 
-                if(rent['checkIn'] == 'None'):
+                if(rent['checkIn'] == None):
                     no_checkIn.append(rent)
 
-                elif(rent['checkOut'] == 'None'):
+                elif(rent['checkOut'] == None):
                     no_checkOut.append(rent) 
 
-                elif(rent['scoring'] == 'None'): 
+                elif(rent['scoring'] == None): 
                     no_scoring.append(rent) 
 
                 else: 
