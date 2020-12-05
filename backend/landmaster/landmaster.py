@@ -131,10 +131,21 @@ class LandmasterApi(Api):
             'success': True,
             'rents': db_rents
         }
+
     def top_score_office(self,id_landmaster):
         cursor = self._db.getCursor()
 
-        sql = f"SELECT officeId FROM offices WHERE landmasterId = '{id_landmaster}'"
+        sql = f"SELECT * FROM offices WHERE landmasterId = '{id_landmaster}' ORDER BY scoring DESC LIMIT 1"
         cursor.execute(sql)
         offices = cursor.fetchall()
 
+        if len(offices) == 0:
+            return{
+                'success': False,
+                'error': 'Could not find any office with this landmasterId'
+            }
+
+        return {
+            'success': True,
+            'offices': offices
+        }
