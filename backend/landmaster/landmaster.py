@@ -46,7 +46,7 @@ class LandmasterApi(Api):
 
         update = (
             f"UPDATE offices SET "
-            f"landmasterId = {office_info['landmasterId']}"
+            f"landmasterId = {office_info['landmasterId']}, "
             f"city = '{office_info['city']}', "
             f"district = '{office_info['district']}', "
             f"address = '{office_info['address']}', "
