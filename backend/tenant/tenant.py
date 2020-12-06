@@ -109,6 +109,7 @@ class TenantApi(Api):
             f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd)"
             f"VALUES ('{id_office}', '{id_tenant}', '{rent_days[0]}', '{rent_days[-1]}')")
         cursor.execute(insert)
+        self._db.commit()
 
         select = f"SELECT * FROM rents WHERE rentId = LAST_INSERT_ID()"
         cursor.execute(select)
@@ -188,3 +189,33 @@ class TenantApi(Api):
             'success': True,
             'offices': db_offices
         }
+
+    def scoreOffice(self, id_rent, score):
+        cursor = self._db.getCursor()
+
+        select_office = f"SELECT * FROM rents WHERE rentId = {id_rent}"
+        cursor.execute (select_office)
+        db_office = cursor.fetchone()
+
+        select_scores = f"SELECT * FROM offices WHERE officeId = {db_office['officeId']}"
+        cursor.execute (select_scores)       
+        scr = cursor.fetchone()
+
+        update = (
+            f"UPDATE offices SET "
+            f"scoring = {scr['scoring']} + {score}, "
+            f"nScore = '{scr['nScore']}' + '{1}'"
+            f"WHERE officeId = {db_office['officeId']}")
+        cursor.execute (update)
+        self._db.commit()
+        
+        cursor.execute (select_scores)       
+        scr = cursor.fetchone()
+
+        return{
+            'success': True,
+            'office': scr
+        }
+
+    
+
