@@ -51,65 +51,6 @@ def testAddOffice():
 def testTop_score_office():
     landmaster_api = LandmasterApi()
     id_landmaster = 1
-    # office = {
-    #     'landmasterId': 1,
-    #     'city': 'Tavares',
-    #     'district': 'Paraiba',
-    #     'address': 'Rua dos Ipes',
-    #     'number': '50',
-    #     'description': 'Lugar bonito',
-    #     'daily_rate': 10.0,
-    #     'capacity':20,
-    #     'type': 'Residencial'
-    # }
-    # office2 = {
-    #     'landmasterId': 0,
-    #     'city': 'João Pessoa',
-    #     'district': 'Paraiba',
-    #     'address': 'Rua dos Ipes',
-    #     'number': '50',
-    #     'description': 'Lugar bonito',
-    #     'daily_rate': 3.0,
-    #     'capacity':20,
-    #     'type': 'Residencial'
-    # }
-
-    # landmaster_api.addOffice(office)
-    # landmaster_api.addOffice(office2)
-    
-    # office_info = {
-    #     'officeId': 1,
-    #     'landmasterId': 1,
-    #     'city': 'joao pessoa',
-    #     'district': 'mangabeira',
-    #     'address': 'rua x',
-    #     'number': 123,
-    #     'description': 'desc',
-    #     'daily_rate': 400.0,
-    #     'capacity': 200,
-    #     'scoring': 7,
-    #     'nScore': 77,
-    #     'type': 'business'
-    # }
-
-    # office_info2 = {
-    #     'officeId': 2,
-    #     'landmasterId': 1,
-    #     'city': 'tavares',
-    #     'district': 'mangabeira',
-    #     'address': 'rua x',
-    #     'number': 123,
-    #     'description': 'desc',
-    #     'daily_rate': 400.0,
-    #     'capacity': 200,
-    #     'scoring': 10,
-    #     'nScore': 77,
-    #     'type': 'business'
-    # }
-
-    # landmaster_api.modifyOffice(office_info)
-    # landmaster_api.modifyOffice(office_info2)
-    # print(landmaster_api.getOffices(id_landmaster))
     print(landmaster_api.top_score_office(id_landmaster))
 
 def testGetMonthRents():

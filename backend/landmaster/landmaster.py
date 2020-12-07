@@ -135,7 +135,7 @@ class LandmasterApi(Api):
     def top_score_office(self,id_landmaster):
         cursor = self._db.getCursor()
 
-        sql = f"SELECT * FROM offices WHERE landmasterId = '{id_landmaster}' ORDER BY scoring DESC LIMIT 1"
+        sql = f"SELECT * FROM offices WHERE landmasterId = '{id_landmaster}' ORDER BY scoring/nScore DESC LIMIT 1"
         cursor.execute(sql)
         offices = cursor.fetchall()
 
