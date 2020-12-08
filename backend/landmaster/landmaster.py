@@ -46,7 +46,7 @@ class LandmasterApi(Api):
 
         update = (
             f"UPDATE offices SET "
-            f"landmasterId = {office_info['landmasterId']}, "
+            f"landmasterId = {office_info['landmasterId']}"
             f"city = '{office_info['city']}', "
             f"district = '{office_info['district']}', "
             f"address = '{office_info['address']}', "
@@ -132,38 +132,20 @@ class LandmasterApi(Api):
             'rents': db_rents
         }
 
-    def getMonthValue(self, id_landmaster):
+    def top_score_office(self,id_landmaster):
         cursor = self._db.getCursor()
 
-        sql_offices = f"SELECT officeId, daily_rate FROM offices WHERE landmasterId = '{id_landmaster}' "
-        cursor.execute(sql_offices)
-        db_offices = cursor.fetchall()
+        sql = f"SELECT * FROM offices WHERE landmasterId = '{id_landmaster}' ORDER BY scoring/nScore DESC LIMIT 1"
+        cursor.execute(sql)
+        office = cursor.fetchall()
 
-        if len(db_offices) == 0:
+        if len(office) == 0:
             return{
                 'success': False,
                 'error': 'Could not find any office with this landmasterId'
             }
 
-        month = datetime.date.today().month
-
-        sql_rents = (
-            f"SELECT officeId, bookingStart, bookingEnd FROM rents "
-            f"WHERE officeId IN {*db_offices['officeId'],} "
-            f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}')")
-        cursor.execute(sql_rents)
-        db_rents = cursor.fetchall()
-
-        value = 0
-        if len(db_rents) > 0:
-            for officeId, start, end in zip(db_rents['officeId'], db_rents['bookingStart'],
-                                            db_rents['bookingEnd']):
-                occupied_days = [start + datetime.timedelta(days=x) for x in range((end-start).days+1)
-                                if (start + datetime.timedelta(days=x)).month == month]
-                index = db_offices['officeId'].index(officeId)
-                value += len(occupied_days)*db_offices['daily_rate'][index]
-
         return {
             'success': True,
-            'value': value
+            'office': office
         }

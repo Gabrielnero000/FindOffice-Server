@@ -33,7 +33,7 @@ def testModifyOffice():
     print(tenant_api.modifyOffice(office_info))
 
 def testAddOffice():
-    tenant_api = LandmasterApi()
+    landmaster_api = LandmasterApi()
 
     office = {
         'landmasterId': 1,
@@ -46,7 +46,12 @@ def testAddOffice():
         'capacity': 200,
         'type': 'Residencial'
     }
-    print(tenant_api.addOffice(office))
+    landmaster_api.addOffice(office)
+
+def testTop_score_office():
+    landmaster_api = LandmasterApi()
+    id_landmaster = 1
+    print(landmaster_api.top_score_office(id_landmaster))
 
 def testGetMonthRents():
     landmaster_api = LandmasterApi()
