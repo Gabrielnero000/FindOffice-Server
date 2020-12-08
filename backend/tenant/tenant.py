@@ -116,7 +116,7 @@ class TenantApi(Api):
 
         insert = (
             f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd, scoring)"
-            f"VALUES ('{id_office}', '{id_tenant}', '{rent_days[0]}', '{rent_days[-1]}', '{NULL}')")
+            f"VALUES ('{id_office}', '{id_tenant}', '{rent_days[0]}', '{rent_days[-1]}', '{None}')")
         cursor.execute(insert)
 
         select = f"SELECT * FROM rents WHERE rentId = LAST_INSERT_ID()"
@@ -221,13 +221,13 @@ class TenantApi(Api):
 
             for rent in my_rents:
 
-                if(rent['checkIn'] == None):
+                if(rent['checkIn'] is None):
                     no_checkIn.append(rent)
 
-                elif(rent['checkOut'] == None):
+                elif(rent['checkOut'] is None):
                     no_checkOut.append(rent) 
 
-                elif(rent['scoring'] == None): 
+                elif(rent['scoring'] is None): 
                     no_scoring.append(rent) 
 
                 else: 
