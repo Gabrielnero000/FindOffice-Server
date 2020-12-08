@@ -81,6 +81,11 @@ def search_offices():
     data = request.json
     return jsonify(tenant_api.searchOffices(data['filter']))
 
+@app.route('/tenant/get_rents', methods=['GET'])
+def get_rents():
+    data = request.json
+    return jsonify(tenant_api.get_rents(data['user_id']))    
+
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)
 

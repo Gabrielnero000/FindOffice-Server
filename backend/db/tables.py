@@ -41,4 +41,5 @@ TABLES['rents'] = (
     "  bookingEnd DATETIME NOT NULL,"
     "  checkIn DATETIME,"
     "  checkOut DATETIME,"
+    "  scoring INT,"
     "  PRIMARY KEY (rentId))")
