@@ -51,6 +51,11 @@ def get_month_value():
     data = request.json
     return jsonify(landmaster_api.getMonthValue(data['id_landmaster']))
 
+@app.route('/landmaster/get_total_value', methods=['POST'])
+def get_total_value():
+    data = request.json
+    return jsonify(landmaster_api.getTotalValue(data['id_landmaster']))
+
 @app.route('/tenant/check_in', methods=['POST'])
 def check_in():
     data = request.json

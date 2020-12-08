@@ -63,7 +63,13 @@ def testGetMonthValue():
     landmaster_api = LandmasterApi()
 
     id_landmaster = 0
-    print(landmaster_api.getMonthRents(id_landmaster))
+    print(landmaster_api.getMonthValue(id_landmaster))
+
+def testGetTotalValue():
+    landmaster_api = LandmasterApi()
+
+    id_landmaster = 0
+    print(landmaster_api.getTotalValue(id_landmaster))
 
 if __name__ == "__main__":
     fire.Fire()
