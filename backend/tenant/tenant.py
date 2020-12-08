@@ -1,8 +1,6 @@
 from backend.api import Api
 
 import datetime
-from calendar import monthrange
-
 
 class TenantApi(Api):
     def __init__(self):
@@ -87,24 +85,17 @@ class TenantApi(Api):
         sql = (
             f"SELECT bookingStart, bookingEnd FROM rents "
             f"WHERE officeId = '{id_office}' "
-            f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}')")
+            f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}') "
+            f"ORDER BY bookingStart")
         cursor.execute(sql)
         db_rents = cursor.fetchall()
 
-        if len(db_rents) == 0:
-            return {
-                'success': True,
-                'message': "All days are vacant in this month"
-            }
-
         occupied_days = []
-        for start, end in zip(db_rents['bookingStart'], db_rents['bookingEnd']):
-            if start.month < month:
-                occupied_days.extend(range(1, end.day+1))
-            elif end.month > month:
-                occupied_days.extend(range(start.day, monthrange(start.year, start.month)[1]+1))
-            else:
-                occupied_days.extend(range(start.day, end.day+1))
+        if len(db_rents) > 0:
+            for start, end in zip(db_rents['bookingStart'], db_rents['bookingEnd']):
+                occupied_days.extend([(start + datetime.timedelta(days=x)).isoformat()
+                                    for x in range((end-start).days + 1)
+                                    if (start + datetime.timedelta(days=x)).month == month])
 
         return {
             'success': True,
@@ -118,6 +109,7 @@ class TenantApi(Api):
             f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd, scoring)"
             f"VALUES ('{id_office}', '{id_tenant}', '{rent_days[0]}', '{rent_days[-1]}', '{None}')")
         cursor.execute(insert)
+        self._db.commit()
 
         select = f"SELECT * FROM rents WHERE rentId = LAST_INSERT_ID()"
         cursor.execute(select)
@@ -188,7 +180,7 @@ class TenantApi(Api):
         if 'available_now' in filter and filter['available_now'] == True and len(db_offices) > 0:
             for office_id in db_offices['officeId']:
                 occupied_days = self.getOfficeOccupation(office_id, datetime.date.today().month)
-                if datetime.date.today().day in occupied_days['days']:
+                if datetime.date.today().isoformat() in occupied_days['days']:
                     index = db_offices['officeId'].index(office_id)
                     for column in db_offices.values():
                         column.pop(index)
@@ -197,6 +189,7 @@ class TenantApi(Api):
             'success': True,
             'offices': db_offices
         }
+
 
     def get_rents(self, id_user){
         cursor = self._db.getCursor()
@@ -245,3 +238,34 @@ class TenantApi(Api):
             'success': True
             'rents': rents
         }
+
+    def scoreOffice(self, id_rent, score):
+        cursor = self._db.getCursor()
+
+        select_office = f"SELECT * FROM rents WHERE rentId = {id_rent}"
+        cursor.execute (select_office)
+        db_office = cursor.fetchone()
+
+        select_scores = f"SELECT * FROM offices WHERE officeId = {db_office['officeId']}"
+        cursor.execute (select_scores)       
+        scr = cursor.fetchone()
+
+        update = (
+            f"UPDATE offices SET "
+            f"scoring = {scr['scoring']} + {score}, "
+            f"nScore = '{scr['nScore']}' + '{1}'"
+            f"WHERE officeId = {db_office['officeId']}")
+        cursor.execute (update)
+        self._db.commit()
+        
+        cursor.execute (select_scores)       
+        scr = cursor.fetchone()
+
+        return{
+            'success': True,
+            'office': scr
+        }
+
+    
+
+

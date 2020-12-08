@@ -5,13 +5,13 @@ import datetime
 def testCheckIn():
     user_api = TenantApi()
 
-    rent_id = 0
+    rent_id = 3
     print(user_api.checkIn(rent_id))
 
 def testCheckOut():
     user_api = TenantApi()
 
-    rent_id = 0
+    rent_id = 1
     print(user_api.checkOut(rent_id))
 
 def testGetOfficeOccupation():
@@ -24,9 +24,9 @@ def testGetOfficeOccupation():
 def testRent():
     user_api = TenantApi()
 
-    id_office = 0
-    id_tenant = 0
-    days = [datetime.datetime(2020,10,20), datetime.datetime(2020,10,21), datetime.datetime(2020,10,22)]
+    id_office = 4
+    id_tenant = 2
+    days = [datetime.datetime(2020,12,5), datetime.datetime(2020,12,6), datetime.datetime(2020,12,7)]
     print(user_api.rent(id_office, id_tenant, days))
 
 def testGet_all_offices():
@@ -49,11 +49,20 @@ def testSearchOffices():
     }
     print(user_api.searchOffices(filter))
 
+
 def testGet_Rents():
     user_api = TenantApi()
 
     user_id = 0
     print(user_api.get_rents(user_id))    
+
+def testScoreOffice():
+    user_api = TenantApi()
+
+    rent_id = 7
+    score = 4
+    print(user_api.scoreOffice(rent_id,score))
+
 
 if __name__ == "__main__":
     fire.Fire()

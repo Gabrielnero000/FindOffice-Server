@@ -24,17 +24,32 @@ def sign_up():
 @app.route('/landmaster/get_offices', methods=['POST'])
 def get_offices():
     data = request.json
-    return jsonify(landmaster_api.getOffices(data['tenant_id']))
+    return jsonify(landmaster_api.getOffices(data['landmaster_id']))
 
 @app.route('/landmaster/exclude_office', methods=['POST'])
 def exclude_office():
     data = request.json
     return jsonify(landmaster_api.excludeOffice(data['office_id']))
 
+@app.route('/landmaster/top_score_office', methods=['POST'])
+def top_score_office():
+    data = request.json
+    return jsonify(landmaster_api.top_score_office(data['id_landmaster']))
+
 @app.route('/landmaster/modify_office', methods=['POST'])
 def modify_office():
     data = request.json
     return jsonify(landmaster_api.modifyOffice(data['office']))
+
+@app.route('/landmaster/get_month_rents', methods=['POST'])
+def get_month_rents():
+    data = request.json
+    return jsonify(landmaster_api.getMonthRents(data['id_landmaster']))
+
+@app.route('/landmaster/get_month_value', methods=['POST'])
+def get_month_value():
+    data = request.json
+    return jsonify(landmaster_api.getMonthValue(data['id_landmaster']))
 
 @app.route('/tenant/check_in', methods=['POST'])
 def check_in():
