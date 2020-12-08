@@ -24,7 +24,7 @@ def sign_up():
 @app.route('/landmaster/get_offices', methods=['POST'])
 def get_offices():
     data = request.json
-    return jsonify(landmaster_api.getOffices(data['tenant_id']))
+    return jsonify(landmaster_api.getOffices(data['landmaster_id']))
 
 @app.route('/landmaster/exclude_office', methods=['POST'])
 def exclude_office():
