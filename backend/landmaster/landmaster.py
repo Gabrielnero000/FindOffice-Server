@@ -221,9 +221,9 @@ class LandmasterApi(Api):
 
         sql = f"SELECT * FROM offices WHERE officeID IN {*[officeId_list[i] for i in indices],}"
         cursor.execute(sql)
-        offices = cursor.fetchall()
+        office = cursor.fetchall()
 
         return {
             'success': True,
-            'office': offices
+            'office': office
         }
