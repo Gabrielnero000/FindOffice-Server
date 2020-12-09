@@ -86,7 +86,11 @@ def search_offices():
     data = request.json
     return jsonify(tenant_api.searchOffices(data['filter']))
 
-<<<<<<< HEAD
+@app.route('/tenant/get_rents', methods=['GET'])
+def get_rents():
+    data = request.json
+    return jsonify(tenant_api.get_rents(data['user_id']))    
+
 @app.route('/tenant/score_office', methods=['POST'])
 def score_office():
     data = request.json
@@ -95,14 +99,7 @@ def score_office():
 @app.route('/landmaster/add_office', methods=['POST'])
 def add_office():
     data = request.json
-    return jsonify(landmaster_api.addOffice(data['office']))
-
-=======
-@app.route('/tenant/get_rents', methods=['GET'])
-def get_rents():
-    data = request.json
-    return jsonify(tenant_api.get_rents(data['user_id']))    
->>>>>>> main
+    return jsonify(landmaster_api.addOffice(data['office']))    
 
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)
