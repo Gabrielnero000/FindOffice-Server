@@ -219,7 +219,11 @@ class LandmasterApi(Api):
         max_rents = max(rents_per_officeId)
         indices = [i for i, x in enumerate(rents_per_officeId) if x == max_rents]
 
+        sql = f"SELECT * FROM offices WHERE officeID IN {*[officeId_list[i] for i in indices],}"
+        cursor.execute(sql)
+        offices = cursor.fetchall()
+
         return {
             'success': True,
-            'most rented offices': [officeId_list[i] for i in indices]
+            'office': offices
         }
