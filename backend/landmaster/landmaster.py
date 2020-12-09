@@ -119,9 +119,10 @@ class LandmasterApi(Api):
             }
 
         month = datetime.date.today().month
+        officeId_list = [d['officeId'] for d in db_offices]
 
         sql_rents = (
-            f"SELECT * FROM rents WHERE officeId IN {*db_offices['officeId'],} "
+            f"SELECT * FROM rents WHERE officeId IN {*officeId_list,} "
             f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}') "
             f"ORDER BY bookingStart")
         cursor.execute(sql_rents)
@@ -163,22 +164,26 @@ class LandmasterApi(Api):
                 'error': 'Could not find any office with this landmasterId'
             }
 
+        officeId_list = [d['officeId'] for d in db_offices]
+
         sql_rents = (
             f"SELECT officeId, bookingStart, bookingEnd FROM rents "
-            f"WHERE officeId IN {*db_offices['officeId'],}")
+            f"WHERE officeId IN {*officeId_list,}")
         cursor.execute(sql_rents)
         db_rents = cursor.fetchall()
 
         month_average = 0
+        daily_rate_list = [d['daily_rate'] for d in db_offices]
         if len(db_rents) > 0:
             for month in range (1,13):
                 value = 0
-                for officeId, start, end in zip(db_rents['officeId'], db_rents['bookingStart'],
-                                                db_rents['bookingEnd']):
-                    occupied_days = [start + datetime.timedelta(days=x) for x in range((end-start).days+1)
-                                    if (start + datetime.timedelta(days=x)).month == month]
-                    index = db_offices['officeId'].index(officeId)
-                    value += len(occupied_days)*db_offices['daily_rate'][index]
+                for d in db_rents:
+                    occupied_days = [
+                        d['bookingStart'] + datetime.timedelta(days=x)
+                        for x in range((d['bookingEnd']-d['bookingStart']).days+1)
+                                    if (d['bookingStart'] + datetime.timedelta(days=x)).month == month]
+                    index = officeId_list.index(d['officeId'])
+                    value += len(occupied_days)*daily_rate_list[index]
                 month_average += value
 
         month_average /= 12
@@ -188,10 +193,17 @@ class LandmasterApi(Api):
             'month average': month_average
         }
 
+<<<<<<< HEAD
     def get_top_value_office(self, id_landmaster):
         cursor = self._db.getCursor()
         
         sql_offices = f"SELECT officeId, daily_rate FROM offices WHERE landmasterId = '{id_landmaster}'"
+=======
+    def getMonthValue(self, id_landmaster):
+        cursor = self._db.getCursor()
+
+        sql_offices = f"SELECT officeId, daily_rate FROM offices WHERE landmasterId = '{id_landmaster}' "
+>>>>>>> main
         cursor.execute(sql_offices)
         db_offices = cursor.fetchall()
 
@@ -201,6 +213,7 @@ class LandmasterApi(Api):
                 'error': 'Could not find any office with this landmasterId'
             }
 
+<<<<<<< HEAD
         officeId_list = [d['officeId'] for d in db_offices]
 
         sql_rents = (
@@ -224,4 +237,29 @@ class LandmasterApi(Api):
         return {
             'success': True,
             'most profitable offices': [officeId_list[i] for i in indices]
+=======
+        month = datetime.date.today().month
+        officeId_list = [d['officeId'] for d in db_offices]
+
+        sql_rents = (
+            f"SELECT officeId, bookingStart, bookingEnd FROM rents "
+            f"WHERE officeId IN {*officeId_list,} "
+            f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}')")
+        cursor.execute(sql_rents)
+        db_rents = cursor.fetchall()
+
+        value = 0
+        daily_rate_list = [d['daily_rate'] for d in db_offices]
+        if len(db_rents) > 0:
+            for d in db_rents:
+                occupied_days = [d['bookingStart'] + datetime.timedelta(days=x)
+                                for x in range((d['bookingEnd']-d['bookingStart']).days+1)
+                                if (d['bookingStart'] + datetime.timedelta(days=x)).month == month]
+                index = officeId_list.index(d['officeId'])
+                value += len(occupied_days)*daily_rate_list[index]
+
+        return {
+            'success': True,
+            'value': value
+>>>>>>> main
         }
