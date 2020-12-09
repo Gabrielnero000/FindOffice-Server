@@ -71,5 +71,11 @@ def testGetTotalValue():
     id_landmaster = 0
     print(landmaster_api.getTotalValue(id_landmaster))
 
+def testGet_top_value_office():
+    landmaster_api = LandmasterApi()
+
+    id_landmaster = 2
+    print(landmaster_api.get_top_value_office(id_landmaster))
+
 if __name__ == "__main__":
     fire.Fire()
