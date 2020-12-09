@@ -187,3 +187,25 @@ class LandmasterApi(Api):
             'success': True,
             'month average': month_average
         }
+
+    def get_top_value_office(self, id_landmaster):
+        cursor = self._db.getCursor()
+
+        select = f"SELECT MIN officeID FROM rents INNER JOIN offices ON offices.officeId=rents.officeId AND offices.landmasterId = '{id_landmaster}'"
+        cursor.execute(select)
+        ofc = cursor.fetchall()
+        
+        count = len(ofc)
+        while count < 0:
+            select_rent = f"SELECT MIN officeId FROM rents INNER JOIN offices ON offices.officeId=rents.officeId AND offices.landmasterId = '{id_landmaster}"
+            cursor.execute(select_rent)
+            rt = cursor.fetchone()
+
+            count-= 1
+                   
+        return{
+            'success': True,
+            'offices': ofc,
+            'count': count
+        }
+
