@@ -49,6 +49,13 @@ def testSearchOffices():
     }
     print(user_api.searchOffices(filter))
 
+
+def testGet_Rents():
+    user_api = TenantApi()
+
+    user_id = 0
+    print(user_api.get_rents(user_id))    
+
 def testScoreOffice():
     user_api = TenantApi()
 
