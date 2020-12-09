@@ -92,10 +92,10 @@ class TenantApi(Api):
 
         occupied_days = []
         if len(db_rents) > 0:
-            for start, end in zip(db_rents['bookingStart'], db_rents['bookingEnd']):
-                occupied_days.extend([(start + datetime.timedelta(days=x)).isoformat()
-                                    for x in range((end-start).days + 1)
-                                    if (start + datetime.timedelta(days=x)).month == month])
+            for d in db_rents:
+                occupied_days.extend([(d['bookingStart'] + datetime.timedelta(days=x)).isoformat()
+                                    for x in range((d['bookingEnd']-d['bookingStart']).days + 1)
+                                    if (d['bookingStart'] + datetime.timedelta(days=x)).month == month])
 
         return {
             'success': True,
@@ -178,12 +178,10 @@ class TenantApi(Api):
         db_offices = cursor.fetchall()
 
         if 'available_now' in filter and filter['available_now'] == True and len(db_offices) > 0:
-            for office_id in db_offices['officeId']:
-                occupied_days = self.getOfficeOccupation(office_id, datetime.date.today().month)
+            for d in db_offices:
+                occupied_days = self.getOfficeOccupation(d['officeId'], datetime.date.today().month)
                 if datetime.date.today().isoformat() in occupied_days['days']:
-                    index = db_offices['officeId'].index(office_id)
-                    for column in db_offices.values():
-                        column.pop(index)
+                    db_offices.remove(d)
 
         return {
             'success': True,
@@ -191,7 +189,7 @@ class TenantApi(Api):
         }
 
 
-    def get_rents(self, id_user){
+    def get_rents(self, id_user):
         cursor = self._db.getCursor()
 
         sql = f"SELECT * FROM rents WHERE userId = '{id_user}'"
@@ -206,7 +204,7 @@ class TenantApi(Api):
         if(my_rents is None):
 
             return{
-                'success': False
+                'success': False,
                 'warning': 'User not found or user with no past rents'
             }
 
@@ -218,13 +216,13 @@ class TenantApi(Api):
                     no_checkIn.append(rent)
 
                 elif(rent['checkOut'] is None):
-                    no_checkOut.append(rent) 
+                    no_checkOut.append(rent)
 
-                elif(rent['scoring'] is None): 
-                    no_scoring.append(rent) 
+                elif(rent['scoring'] is None):
+                    no_scoring.append(rent)
 
-                else: 
-                    past_rents.append(rent) 
+                else:
+                    past_rents.append(rent)
 
 
         rents = {
@@ -232,10 +230,10 @@ class TenantApi(Api):
             'no_checkOut': no_checkOut,
             'no_scoring': no_scoring,
             'past_rents': past_rents
-        }                     
+        }
 
         return{
-            'success': True
+            'success': True,
             'rents': rents
         }
 
@@ -247,7 +245,7 @@ class TenantApi(Api):
         db_office = cursor.fetchone()
 
         select_scores = f"SELECT * FROM offices WHERE officeId = {db_office['officeId']}"
-        cursor.execute (select_scores)       
+        cursor.execute (select_scores)
         scr = cursor.fetchone()
 
         update = (
@@ -257,8 +255,8 @@ class TenantApi(Api):
             f"WHERE officeId = {db_office['officeId']}")
         cursor.execute (update)
         self._db.commit()
-        
-        cursor.execute (select_scores)       
+
+        cursor.execute (select_scores)
         scr = cursor.fetchone()
 
         return{
@@ -266,6 +264,6 @@ class TenantApi(Api):
             'office': scr
         }
 
-    
+
 
 
