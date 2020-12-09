@@ -42,7 +42,7 @@ def testAddOffice():
         'address': 'Rua dos Ipes',
         'number': '50',
         'description': 'Lugar bonito',
-        'daily_rate': 50.0,
+        'daily_rate': 70.0,
         'capacity': 200,
         'type': 'Residencial'
     }
@@ -74,7 +74,7 @@ def testGetTotalValue():
 def testGet_top_value_office():
     landmaster_api = LandmasterApi()
 
-    id_landmaster = 2
+    id_landmaster = 1
     print(landmaster_api.get_top_value_office(id_landmaster))
 
 if __name__ == "__main__":

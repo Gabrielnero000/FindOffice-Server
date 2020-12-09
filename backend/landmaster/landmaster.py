@@ -190,22 +190,38 @@ class LandmasterApi(Api):
 
     def get_top_value_office(self, id_landmaster):
         cursor = self._db.getCursor()
-
-        select = f"SELECT MIN officeID FROM rents INNER JOIN offices ON offices.officeId=rents.officeId AND offices.landmasterId = '{id_landmaster}'"
-        cursor.execute(select)
-        ofc = cursor.fetchall()
         
-        count = len(ofc)
-        while count < 0:
-            select_rent = f"SELECT MIN officeId FROM rents INNER JOIN offices ON offices.officeId=rents.officeId AND offices.landmasterId = '{id_landmaster}"
-            cursor.execute(select_rent)
-            rt = cursor.fetchone()
+        sql_offices = f"SELECT officeId, daily_rate FROM offices WHERE landmasterId = '{id_landmaster}'"
+        cursor.execute(sql_offices)
+        db_offices = cursor.fetchall()
 
-            count-= 1
-                   
-        return{
+        if len(db_offices) == 0:
+            return{
+                'success': False,
+                'error': 'Could not find any office with this landmasterId'
+            }
+
+        officeId_list = [d['officeId'] for d in db_offices]
+
+        sql_rents = (
+            f"SELECT officeId, bookingStart, bookingEnd "
+            f"FROM rents WHERE officeId IN {*officeId_list,}")
+        cursor.execute(sql_rents)
+        db_rents = cursor.fetchall()
+				
+        daily_rate_list = [d['daily_rate'] for d in db_offices]
+        value_per_officeId = [0]*len(db_offices)
+        if len(db_rents) > 0:
+            for d in db_rents:
+                occupied_days = [d['bookingStart'] + datetime.timedelta(days=x)
+                                for x in range((d['bookingEnd']-d['bookingStart']).days+1)]
+                index = officeId_list.index(d['officeId'])
+                value_per_officeId[index] += len(occupied_days)*daily_rate_list[index]
+
+        max_rents = max(value_per_officeId)
+        indices = [i for i, x in enumerate(value_per_officeId) if x == max_rents]
+
+        return {
             'success': True,
-            'offices': ofc,
-            'count': count
+            'most profitable offices': [officeId_list[i] for i in indices]
         }
-
