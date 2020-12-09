@@ -191,7 +191,7 @@ class TenantApi(Api):
         }
 
 
-    def get_rents(self, id_user){
+    def get_rents(self, id_user):
         cursor = self._db.getCursor()
 
         sql = f"SELECT * FROM rents WHERE userId = '{id_user}'"
