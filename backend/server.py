@@ -51,6 +51,11 @@ def get_month_value():
     data = request.json
     return jsonify(landmaster_api.getMonthValue(data['id_landmaster']))
 
+@app.route('/landmaster/get_total_value', methods=['POST'])
+def get_total_value():
+    data = request.json
+    return jsonify(landmaster_api.getTotalValue(data['id_landmaster']))
+
 @app.route('/tenant/check_in', methods=['POST'])
 def check_in():
     data = request.json
@@ -81,6 +86,7 @@ def search_offices():
     data = request.json
     return jsonify(tenant_api.searchOffices(data['filter']))
 
+<<<<<<< HEAD
 @app.route('/tenant/score_office', methods=['POST'])
 def score_office():
     data = request.json
@@ -91,6 +97,12 @@ def add_office():
     data = request.json
     return jsonify(landmaster_api.addOffice(data['office']))
 
+=======
+@app.route('/tenant/get_rents', methods=['GET'])
+def get_rents():
+    data = request.json
+    return jsonify(tenant_api.get_rents(data['user_id']))    
+>>>>>>> main
 
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)
