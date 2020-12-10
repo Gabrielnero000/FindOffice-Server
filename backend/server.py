@@ -81,15 +81,16 @@ def get_all_offices():
     data = request.json
     return jsonify(tenant_api.get_all_offices())
 
-@app.route('/tenant/search_offices', methods=['GET'])
+@app.route('/tenant/search_offices', methods=['POST'])
 def search_offices():
     data = request.json
     return jsonify(tenant_api.searchOffices(data['filter']))
 
-@app.route('/tenant/get_rents', methods=['GET'])
+@app.route('/tenant/get_rents', methods=['POST'])
 def get_rents():
     data = request.json
-    return jsonify(tenant_api.get_rents(data['user_id']))    
+    print(data)
+    return jsonify(tenant_api.get_rents(data['tenant_id']))    
 
 @app.route('/tenant/score_office', methods=['POST'])
 def score_office():

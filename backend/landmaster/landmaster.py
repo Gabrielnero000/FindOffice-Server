@@ -33,8 +33,9 @@ class LandmasterApi(Api):
                 'success': False,
                 'error': 'Office not excluded'
             }
-        return{
-            'sucess': True
+
+        return {
+            'success': True
         }
 
     def modifyOffice(self, office_info):
@@ -46,7 +47,7 @@ class LandmasterApi(Api):
 
         update = (
             f"UPDATE offices SET "
-            f"landmasterId = {office_info['landmasterId']}"
+            f"landmasterId = {office_info['landmasterId']}, "
             f"city = '{office_info['city']}', "
             f"district = '{office_info['district']}', "
             f"address = '{office_info['address']}', "
@@ -70,6 +71,7 @@ class LandmasterApi(Api):
                 'success': False,
                 'error': 'Office not found'
             }
+
         if db_office_pre == db_office_post:
             return {
                 'success': False,

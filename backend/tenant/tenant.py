@@ -102,12 +102,15 @@ class TenantApi(Api):
             'days': occupied_days
         }
 
-    def rent(self, id_office, id_tenant, rent_days, scoring):
+    def rent(self, id_office, id_tenant, rent_days):
         cursor = self._db.getCursor()
+        
+        start = datetime.datetime.strptime(rent_days[0], '%Y-%m-%d')
+        end = datetime.datetime.strptime(rent_days[-1], '%Y-%m-%d')
 
         insert = (
-            f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd, scoring)"
-            f"VALUES ('{id_office}', '{id_tenant}', '{rent_days[0]}', '{rent_days[-1]}', '{None}')")
+            f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd, scoring) "
+            f"VALUES ({id_office}, {id_tenant}, '{start}', '{end}', {0})")
         cursor.execute(insert)
         self._db.commit()
 
@@ -189,10 +192,10 @@ class TenantApi(Api):
         }
 
 
-    def get_rents(self, id_user):
+    def get_rents(self, id_tenant):
         cursor = self._db.getCursor()
 
-        sql = f"SELECT * FROM rents WHERE userId = '{id_user}'"
+        sql = f"SELECT * FROM rents WHERE tenantId = '{id_tenant}'"
         cursor.execute(sql)
         my_rents = cursor.fetchall()
 
