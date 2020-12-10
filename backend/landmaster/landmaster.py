@@ -122,10 +122,16 @@ class LandmasterApi(Api):
         month = datetime.date.today().month
         officeId_list = [d['officeId'] for d in db_offices]
 
-        sql_rents = (
-            f"SELECT * FROM rents WHERE officeId IN {*officeId_list,} "
-            f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}') "
-            f"ORDER BY bookingStart")
+        if len(db_offices) == 1:
+            sql_rents = (
+                f"SELECT * FROM rents WHERE officeId = {officeId_list[0]} "
+                f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}') "
+                f"ORDER BY bookingStart")
+        else:
+            sql_rents = (
+                f"SELECT * FROM rents WHERE officeId IN {*officeId_list,} "
+                f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}') "
+                f"ORDER BY bookingStart")
         cursor.execute(sql_rents)
         db_rents = cursor.fetchall()
 
@@ -160,10 +166,16 @@ class LandmasterApi(Api):
             }
 
         officeId_list = [d['officeId'] for d in db_offices]
+        if len(db_offices) == 1:
+            sql_rents = (
+                f"SELECT officeId, bookingStart, bookingEnd FROM rents "
+                f"WHERE officeId = {officeId_list[0]}")
+            print(sql_rents)
+        else:
+            sql_rents = (
+                f"SELECT officeId, bookingStart, bookingEnd FROM rents "
+                f"WHERE officeId IN {*officeId_list,}")
 
-        sql_rents = (
-            f"SELECT officeId, bookingStart, bookingEnd FROM rents "
-            f"WHERE officeId IN {*officeId_list,}")
         cursor.execute(sql_rents)
         db_rents = cursor.fetchall()
 
@@ -204,10 +216,16 @@ class LandmasterApi(Api):
         month = datetime.date.today().month
         officeId_list = [d['officeId'] for d in db_offices]
 
-        sql_rents = (
-            f"SELECT officeId, bookingStart, bookingEnd FROM rents "
-            f"WHERE officeId IN {*officeId_list,} "
-            f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}')")
+        if len(db_offices) == 1:
+            sql_rents = (
+                f"SELECT officeId, bookingStart, bookingEnd FROM rents "
+                f"WHERE officeId = {officeId_list[0]} "
+                f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}')")
+        else:
+            sql_rents = (
+                f"SELECT officeId, bookingStart, bookingEnd FROM rents "
+                f"WHERE officeId IN {*officeId_list,} "
+                f"AND (MONTH(bookingStart) = '{month}' OR MONTH(bookingEnd) = '{month}')")
         cursor.execute(sql_rents)
         db_rents = cursor.fetchall()
 
@@ -239,11 +257,15 @@ class LandmasterApi(Api):
             }
 
         officeId_list = [d['officeId'] for d in db_offices]
+        if len(db_offices) == 1:
+            sql_rents = (
+                f"SELECT officeId, bookingStart, bookingEnd "
+                f"FROM rents WHERE officeId = {officeId_list[0]}")
+        else:
+            sql_rents = (
+                f"SELECT officeId, bookingStart, bookingEnd "
+                f"FROM rents WHERE officeId IN {*officeId_list,}")
 
-        sql_rents = (
-            f"SELECT officeId, bookingStart, bookingEnd "
-            f"FROM rents WHERE officeId IN {*officeId_list,}")
-        
         cursor.execute(sql_rents)
         db_rents = cursor.fetchall()
 
@@ -258,8 +280,11 @@ class LandmasterApi(Api):
         max_rents = max(rents_per_officeId)
         indices = [i for i, x in enumerate(rents_per_officeId) if x == max_rents]
 
-        sql = f"SELECT * FROM offices WHERE officeId IN {*[officeId_list[i] for i in indices],}"
-        print(sql)
+        if len(officeId_list) == 1:
+            sql = f"SELECT * FROM offices WHERE officeId = {[officeId_list[i] for i in indices][0]}"
+        else:
+            sql = f"SELECT * FROM offices WHERE officeId IN {*[officeId_list[i] for i in indices],}"
+
         cursor.execute(sql)
         office = cursor.fetchall()
 
@@ -284,9 +309,14 @@ class LandmasterApi(Api):
 
         officeId_list = [d['officeId'] for d in db_offices]
 
-        sql_rents = (
-            f"SELECT officeId, bookingStart, bookingEnd "
-            f"FROM rents WHERE officeId IN {*officeId_list,}")
+        if len(db_offices) == 1:
+            sql_rents = (
+                f"SELECT officeId, bookingStart, bookingEnd "
+                f"FROM rents WHERE officeId = {officeId_list[0]}")
+        else:
+            sql_rents = (
+                f"SELECT officeId, bookingStart, bookingEnd "
+                f"FROM rents WHERE officeId IN {*officeId_list,}")
         cursor.execute(sql_rents)
         db_rents = cursor.fetchall()
 
@@ -302,7 +332,10 @@ class LandmasterApi(Api):
         max_rents = max(value_per_officeId)
         indices = [i for i, x in enumerate(value_per_officeId) if x == max_rents]
 
-        sql = f"SELECT * FROM offices WHERE officeId IN {*[officeId_list[i] for i in indices],}"
+        if len(officeId_list) == 1:
+            sql = f"SELECT * FROM offices WHERE officeId = {[officeId_list[i] for i in indices][0]}"
+        else:
+            sql = f"SELECT * FROM offices WHERE officeId IN {*[officeId_list[i] for i in indices],}"
         cursor.execute(sql)
         office = cursor.fetchall()
 
