@@ -71,17 +71,18 @@ def testGetTotalValue():
     id_landmaster = 0
     print(landmaster_api.getTotalValue(id_landmaster))
 
-def testGetTotalValue():
-    landmaster_api = LandmasterApi()
-
-    id_landmaster = 1
-    print(landmaster_api.getTotalValue(id_landmaster))
-
 def testTopRentsOffice():
     landmaster_api = LandmasterApi()
 
     id_landmaster = 1
     print(landmaster_api.topRentsOffice(id_landmaster))
+
+
+def testGet_top_value_office():
+    landmaster_api = LandmasterApi()
+
+    id_landmaster = 1
+    print(landmaster_api.get_top_value_office(id_landmaster))
 
 def testGet_top_value_office():
     landmaster_api = LandmasterApi()

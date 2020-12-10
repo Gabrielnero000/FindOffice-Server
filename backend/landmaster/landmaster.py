@@ -313,4 +313,5 @@ class LandmasterApi(Api):
         return {
             'success': True,
             'office': office,
+            'value': max_rents
         }

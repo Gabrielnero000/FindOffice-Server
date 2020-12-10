@@ -243,25 +243,29 @@ class TenantApi(Api):
         select_office = f"SELECT * FROM rents WHERE rentId = {id_rent}"
         cursor.execute (select_office)
         db_office = cursor.fetchone()
+        update_rent = (
+            f"UPDATE rents SET "
+            f"scoring = {score} "
+            f"WHERE officeId = {db_office['officeId']}")
+        cursor.execute (update_rent)
+        self._db.commit()
 
         select_scores = f"SELECT * FROM offices WHERE officeId = {db_office['officeId']}"
         cursor.execute (select_scores)
         scr = cursor.fetchone()
 
-        update = (
+        update_office = (
             f"UPDATE offices SET "
             f"scoring = {scr['scoring']} + {score}, "
             f"nScore = '{scr['nScore']}' + '{1}'"
             f"WHERE officeId = {db_office['officeId']}")
-        cursor.execute (update)
+        cursor.execute (update_office)
         self._db.commit()
-
-        cursor.execute (select_scores)
-        scr = cursor.fetchone()
 
         return{
             'success': True,
-            'office': scr
+            'office': scr,
+            'rent': db_office
         }
 
 
