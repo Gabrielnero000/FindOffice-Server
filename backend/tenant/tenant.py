@@ -68,7 +68,7 @@ class TenantApi(Api):
             cursor.execute(validation)
             db_validation = cursor.fetchone()
 
-            if (db_validation['checkOut']).days != current_date):
+            if (current_date - db_validation['checkOut']).days > 0:
                 return {
                     'success': False,
                     'error': 'Unable to checkout'
