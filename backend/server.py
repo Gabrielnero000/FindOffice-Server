@@ -36,6 +36,11 @@ def top_score_office():
     data = request.json
     return jsonify(landmaster_api.top_score_office(data['id_landmaster']))
 
+@app.route('/landmaster/top_rents_office', methods=['POST'])
+def top_rents_office():
+    data = request.json
+    return jsonify(landmaster_api.topRentsOffice(data['id_landmaster']))
+
 @app.route('/landmaster/modify_office', methods=['POST'])
 def modify_office():
     data = request.json
@@ -101,6 +106,11 @@ def score_office():
 def add_office():
     data = request.json
     return jsonify(landmaster_api.addOffice(data['office']))    
+
+@app.route('/landmaster/get_topvalue_office', methods=['GET'])
+def get_topvalue_office():
+    data = request.json
+    return jsonify(landmaster_api.get_top_value_office(data['id_landmaster']))
 
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)

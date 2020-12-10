@@ -34,7 +34,7 @@ def testModifyOffice():
 
 def testAddOffice():
     landmaster_api = LandmasterApi()
-
+    
     office = {
         'landmasterId': 1,
         'city': 'JP',
@@ -42,7 +42,7 @@ def testAddOffice():
         'address': 'Rua dos Ipes',
         'number': '50',
         'description': 'Lugar bonito',
-        'daily_rate': 50.0,
+        'daily_rate': 70.0,
         'capacity': 200,
         'type': 'Residencial'
     }
@@ -70,6 +70,27 @@ def testGetTotalValue():
 
     id_landmaster = 0
     print(landmaster_api.getTotalValue(id_landmaster))
+
+def testTopRentsOffice():
+    landmaster_api = LandmasterApi()
+
+    id_landmaster = 1
+    print(landmaster_api.topRentsOffice(id_landmaster))
+
+
+def testGet_top_value_office():
+    landmaster_api = LandmasterApi()
+
+    id_landmaster = 1
+    print(landmaster_api.get_top_value_office(id_landmaster))
+
+def testGet_top_value_office():
+    landmaster_api = LandmasterApi()
+
+    id_landmaster = 1
+    print(landmaster_api.get_top_value_office(id_landmaster))
+
+
 
 if __name__ == "__main__":
     fire.Fire()
