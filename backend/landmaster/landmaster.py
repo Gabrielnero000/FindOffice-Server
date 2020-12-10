@@ -193,17 +193,10 @@ class LandmasterApi(Api):
             'month average': month_average
         }
 
-<<<<<<< HEAD
-    def get_top_value_office(self, id_landmaster):
-        cursor = self._db.getCursor()
-        
-        sql_offices = f"SELECT officeId, daily_rate FROM offices WHERE landmasterId = '{id_landmaster}'"
-=======
     def getMonthValue(self, id_landmaster):
         cursor = self._db.getCursor()
 
         sql_offices = f"SELECT officeId, daily_rate FROM offices WHERE landmasterId = '{id_landmaster}' "
->>>>>>> main
         cursor.execute(sql_offices)
         db_offices = cursor.fetchall()
 
@@ -213,31 +206,6 @@ class LandmasterApi(Api):
                 'error': 'Could not find any office with this landmasterId'
             }
 
-<<<<<<< HEAD
-        officeId_list = [d['officeId'] for d in db_offices]
-
-        sql_rents = (
-            f"SELECT officeId, bookingStart, bookingEnd "
-            f"FROM rents WHERE officeId IN {*officeId_list,}")
-        cursor.execute(sql_rents)
-        db_rents = cursor.fetchall()
-				
-        daily_rate_list = [d['daily_rate'] for d in db_offices]
-        value_per_officeId = [0]*len(db_offices)
-        if len(db_rents) > 0:
-            for d in db_rents:
-                occupied_days = [d['bookingStart'] + datetime.timedelta(days=x)
-                                for x in range((d['bookingEnd']-d['bookingStart']).days+1)]
-                index = officeId_list.index(d['officeId'])
-                value_per_officeId[index] += len(occupied_days)*daily_rate_list[index]
-
-        max_rents = max(value_per_officeId)
-        indices = [i for i, x in enumerate(value_per_officeId) if x == max_rents]
-
-        return {
-            'success': True,
-            'most profitable offices': [officeId_list[i] for i in indices]
-=======
         month = datetime.date.today().month
         officeId_list = [d['officeId'] for d in db_offices]
 
@@ -261,9 +229,6 @@ class LandmasterApi(Api):
         return {
             'success': True,
             'value': value
-<<<<<<< HEAD
->>>>>>> main
-=======
         }
 
     def topRentsOffice(self, id_landmaster):
@@ -297,12 +262,55 @@ class LandmasterApi(Api):
         max_rents = max(rents_per_officeId)
         indices = [i for i, x in enumerate(rents_per_officeId) if x == max_rents]
 
-        sql = f"SELECT * FROM offices WHERE officeID IN {*[officeId_list[i] for i in indices],}"
+        sql = f"SELECT * FROM offices WHERE officeId IN {*[officeId_list[i] for i in indices],}"
+        print(sql)
         cursor.execute(sql)
         office = cursor.fetchall()
 
         return {
             'success': True,
-            'office': office
->>>>>>> main
+            'office': office,
+            'value': max_rents
+        }
+
+    def get_top_value_office(self, id_landmaster):
+        cursor = self._db.getCursor()
+
+        sql_offices = f"SELECT officeId, daily_rate FROM offices WHERE landmasterId = '{id_landmaster}'"
+        cursor.execute(sql_offices)
+        db_offices = cursor.fetchall()
+
+        if len(db_offices) == 0:
+            return{
+                'success': False,
+                'error': 'Could not find any office with this landmasterId'
+            }
+
+        officeId_list = [d['officeId'] for d in db_offices]
+
+        sql_rents = (
+            f"SELECT officeId, bookingStart, bookingEnd "
+            f"FROM rents WHERE officeId IN {*officeId_list,}")
+        cursor.execute(sql_rents)
+        db_rents = cursor.fetchall()
+
+        daily_rate_list = [d['daily_rate'] for d in db_offices]
+        value_per_officeId = [0]*len(db_offices)
+        if len(db_rents) > 0:
+            for d in db_rents:
+                occupied_days = [d['bookingStart'] + datetime.timedelta(days=x)
+                                for x in range((d['bookingEnd']-d['bookingStart']).days+1)]
+                index = officeId_list.index(d['officeId'])
+                value_per_officeId[index] += len(occupied_days)*daily_rate_list[index]
+
+        max_rents = max(value_per_officeId)
+        indices = [i for i, x in enumerate(value_per_officeId) if x == max_rents]
+
+        sql = f"SELECT * FROM offices WHERE officeId IN {*[officeId_list[i] for i in indices],}"
+        cursor.execute(sql)
+        office = cursor.fetchall()
+
+        return {
+            'success': True,
+            'office': office,
         }
