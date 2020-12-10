@@ -106,6 +106,11 @@ def add_office():
     data = request.json
     return jsonify(landmaster_api.addOffice(data['office']))    
 
+@app.route('/landmaster/get_topvalue_office', methods=['GET'])
+def get_topvalue_office():
+    data = request.json
+    return jsonify(landmaster_api.get_top_value_office(data['id_landmaster']))
+
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)
 
