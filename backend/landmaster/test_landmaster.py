@@ -34,7 +34,7 @@ def testModifyOffice():
 
 def testAddOffice():
     landmaster_api = LandmasterApi()
-
+    
     office = {
         'landmasterId': 1,
         'city': 'JP',
@@ -71,11 +71,26 @@ def testGetTotalValue():
     id_landmaster = 0
     print(landmaster_api.getTotalValue(id_landmaster))
 
+<<<<<<< HEAD
 def testGet_top_value_office():
     landmaster_api = LandmasterApi()
 
     id_landmaster = 1
     print(landmaster_api.get_top_value_office(id_landmaster))
+=======
+def testGetTotalValue():
+    landmaster_api = LandmasterApi()
+
+    id_landmaster = 0
+    print(landmaster_api.getTotalValue(id_landmaster))
+
+def testTopRentsOffice():
+    landmaster_api = LandmasterApi()
+
+    id_landmaster = 1
+    print(landmaster_api.topRentsOffice(id_landmaster))
+
+>>>>>>> main
 
 if __name__ == "__main__":
     fire.Fire()
