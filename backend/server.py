@@ -34,12 +34,12 @@ def exclude_office():
 @app.route('/landmaster/top_score_office', methods=['POST'])
 def top_score_office():
     data = request.json
-    return jsonify(landmaster_api.top_score_office(data['id_landmaster']))
+    return jsonify(landmaster_api.top_score_office(data['landmaster_id']))
 
 @app.route('/landmaster/top_rents_office', methods=['POST'])
 def top_rents_office():
     data = request.json
-    return jsonify(landmaster_api.topRentsOffice(data['id_landmaster']))
+    return jsonify(landmaster_api.topRentsOffice(data['landmaster_id']))
 
 @app.route('/landmaster/modify_office', methods=['POST'])
 def modify_office():
@@ -49,17 +49,17 @@ def modify_office():
 @app.route('/landmaster/get_month_rents', methods=['POST'])
 def get_month_rents():
     data = request.json
-    return jsonify(landmaster_api.getMonthRents(data['id_landmaster']))
+    return jsonify(landmaster_api.getMonthRents(data['landmaster_id']))
 
 @app.route('/landmaster/get_month_value', methods=['POST'])
 def get_month_value():
     data = request.json
-    return jsonify(landmaster_api.getMonthValue(data['id_landmaster']))
+    return jsonify(landmaster_api.getMonthValue(data['landmaster_id']))
 
 @app.route('/landmaster/get_total_value', methods=['POST'])
 def get_total_value():
     data = request.json
-    return jsonify(landmaster_api.getTotalValue(data['id_landmaster']))
+    return jsonify(landmaster_api.getTotalValue(data['landmaster_id']))
 
 @app.route('/tenant/check_in', methods=['POST'])
 def check_in():
@@ -83,7 +83,6 @@ def rent():
 
 @app.route('/tenant/get_all_offices', methods=['GET'])
 def get_all_offices():
-    data = request.json
     return jsonify(tenant_api.get_all_offices())
 
 @app.route('/tenant/search_offices', methods=['POST'])
@@ -100,7 +99,7 @@ def get_rents():
 @app.route('/tenant/score_office', methods=['POST'])
 def score_office():
     data = request.json
-    return jsonify(tenant_api.scoreOffice(data['id_rent'], data['score']))
+    return jsonify(tenant_api.scoreOffice(data['rent_id'], data['score']))
 
 @app.route('/landmaster/add_office', methods=['POST'])
 def add_office():
@@ -110,7 +109,7 @@ def add_office():
 @app.route('/landmaster/get_topvalue_office', methods=['GET'])
 def get_topvalue_office():
     data = request.json
-    return jsonify(landmaster_api.get_top_value_office(data['id_landmaster']))
+    return jsonify(landmaster_api.get_top_value_office(data['landmaster_id']))
 
 def launch(port=5804, debug=False):
     app.run(debug=debug, port=port, host='0.0.0.0', threaded=False)

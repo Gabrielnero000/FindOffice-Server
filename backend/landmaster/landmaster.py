@@ -104,7 +104,6 @@ class LandmasterApi(Api):
         return {
             'success': True,
             'office': db_office,
-            'error': None
         }
 
     def getMonthRents(self, id_landmaster):
@@ -141,12 +140,6 @@ class LandmasterApi(Api):
         sql = f"SELECT * FROM offices WHERE landmasterId = '{id_landmaster}' ORDER BY scoring/nScore DESC LIMIT 1"
         cursor.execute(sql)
         office = cursor.fetchall()
-
-        if len(office) == 0:
-            return{
-                'success': False,
-                'error': 'Could not find any office with this landmasterId'
-            }
 
         return {
             'success': True,
@@ -192,7 +185,7 @@ class LandmasterApi(Api):
 
         return {
             'success': True,
-            'month average': month_average
+            'month_average': month_average
         }
 
     def getMonthValue(self, id_landmaster):
@@ -250,6 +243,7 @@ class LandmasterApi(Api):
         sql_rents = (
             f"SELECT officeId, bookingStart, bookingEnd "
             f"FROM rents WHERE officeId IN {*officeId_list,}")
+        
         cursor.execute(sql_rents)
         db_rents = cursor.fetchall()
 
