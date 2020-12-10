@@ -285,6 +285,8 @@ class LandmasterApi(Api):
         else:
             sql = f"SELECT * FROM offices WHERE officeId IN {*[officeId_list[i] for i in indices],}"
 
+        print(sql)
+
         cursor.execute(sql)
         office = cursor.fetchall()
 

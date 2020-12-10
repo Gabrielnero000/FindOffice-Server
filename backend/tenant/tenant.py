@@ -9,17 +9,17 @@ class TenantApi(Api):
     def checkIn(self, id_rent):
         cursor = self._db.getCursor()
 
-        current_date = datetime.date.today()
+        current_date = datetime.datetime.today()
 
         preCheckIn = f"SELECT bookingStart FROM rents WHERE rentId = '{id_rent}'"
         cursor.execute(preCheckIn)
         db_PreCheckIn = cursor.fetchone()
 
-        if db_PreCheckIn == current_date:
+        if (current_date - db_PreCheckIn['bookingStart']).days <= 0:
 
             update = (
-            f"UPDATE rents"
-            f"SET checkIn = '{current_date}'"
+            f"UPDATE rents "
+            f"SET checkIn = '{current_date}' "
             f"WHERE rentId = '{id_rent}'")
             cursor.execute(update)
 
@@ -27,7 +27,7 @@ class TenantApi(Api):
             cursor.execute(validation)
             db_validation = cursor.fetchone()
 
-            if db_validation != current_date:
+            if (current_date - db_validation['checkIn']).days > 0:
                 return {
                     'success': False,
                     'error': 'Unable to checkin'
