@@ -5,7 +5,7 @@ import datetime
 def testCheckIn():
     user_api = TenantApi()
 
-    rent_id = 3
+    rent_id = 2
     print(user_api.checkIn(rent_id))
 
 def testCheckOut():
@@ -24,9 +24,9 @@ def testGetOfficeOccupation():
 def testRent():
     user_api = TenantApi()
 
-    id_office = 4
+    id_office = 1
     id_tenant = 2
-    days = [datetime.datetime(2020,12,5), datetime.datetime(2020,12,6), datetime.datetime(2020,12,7)]
+    days = ["2020-12-10", "2020-12-11", "2020-12-12"]
     print(user_api.rent(id_office, id_tenant, days))
 
 def testGet_all_offices():
@@ -54,7 +54,7 @@ def testGet_Rents():
     user_api = TenantApi()
 
     user_id = 0
-    print(user_api.get_rents(user_id))    
+    print(user_api.get_rents(user_id))
 
 def testScoreOffice():
     user_api = TenantApi()
