@@ -3,8 +3,8 @@ from backend.api import Api
 import datetime
 
 class LandmasterApi(Api):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, today):
+        super().__init__(today)
 
     def getOffices(self, id_landmaster):
         cursor = self._db.getCursor()
@@ -22,6 +22,8 @@ class LandmasterApi(Api):
 
         sql = f"DELETE FROM offices WHERE officeId  = '{id_office}'"
         cursor.execute(sql)
+
+        self._db.commit()
 
         sql = f"SELECT * FROM offices WHERE officeId = '{id_office}'"
         cursor.execute(sql)
@@ -62,6 +64,8 @@ class LandmasterApi(Api):
 
         cursor.execute(update)
 
+        self._db.commit()
+
         post_update = f"SELECT * FROM offices WHERE officeId = {office_info['officeId']}"
         cursor.execute(post_update)
         db_office_post = cursor.fetchone()
@@ -77,6 +81,7 @@ class LandmasterApi(Api):
                 'success': False,
                 'error': 'Office not modified'
             }
+
         return{
             'success': True,
             'office': db_office_post
@@ -119,7 +124,7 @@ class LandmasterApi(Api):
                 'error': 'Could not find any office with this landmasterId'
             }
 
-        month = datetime.date.today().month
+        month = self._today.month
         officeId_list = [d['officeId'] for d in db_offices]
 
         if len(db_offices) == 1:
@@ -170,7 +175,6 @@ class LandmasterApi(Api):
             sql_rents = (
                 f"SELECT officeId, bookingStart, bookingEnd FROM rents "
                 f"WHERE officeId = {officeId_list[0]}")
-            print(sql_rents)
         else:
             sql_rents = (
                 f"SELECT officeId, bookingStart, bookingEnd FROM rents "
@@ -213,7 +217,7 @@ class LandmasterApi(Api):
                 'error': 'Could not find any office with this landmasterId'
             }
 
-        month = datetime.date.today().month
+        month = self._today.month
         officeId_list = [d['officeId'] for d in db_offices]
 
         if len(db_offices) == 1:
@@ -285,8 +289,6 @@ class LandmasterApi(Api):
         else:
             sql = f"SELECT * FROM offices WHERE officeId IN {*[officeId_list[i] for i in indices],}"
 
-        print(sql)
-
         cursor.execute(sql)
         office = cursor.fetchall()
 
@@ -295,6 +297,7 @@ class LandmasterApi(Api):
             'office': office,
             'value': max_rents
         }
+
 
     def get_top_value_office(self, id_landmaster):
         cursor = self._db.getCursor()
@@ -319,6 +322,7 @@ class LandmasterApi(Api):
             sql_rents = (
                 f"SELECT officeId, bookingStart, bookingEnd "
                 f"FROM rents WHERE officeId IN {*officeId_list,}")
+
         cursor.execute(sql_rents)
         db_rents = cursor.fetchall()
 
@@ -340,7 +344,7 @@ class LandmasterApi(Api):
             sql = f"SELECT * FROM offices WHERE officeId IN {*[officeId_list[i] for i in indices],}"
         cursor.execute(sql)
         office = cursor.fetchall()
-
+        
         return {
             'success': True,
             'office': office,

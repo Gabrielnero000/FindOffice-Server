@@ -2,13 +2,16 @@ from backend.auth import AuthApi
 from backend.tenant import TenantApi
 from backend.landmaster import LandmasterApi
 from flask import Flask, request, jsonify
+import datetime
 import fire
 
 app = Flask(__name__)
 
-auth_api = AuthApi()
-tenant_api = TenantApi()
-landmaster_api = LandmasterApi()
+today = datetime.datetime(2020, 12, 11)
+
+auth_api = AuthApi(today)
+tenant_api = TenantApi(today)
+landmaster_api = LandmasterApi(today)
 
 @app.route('/auth/login', methods=['POST'])
 def login():
@@ -106,7 +109,7 @@ def add_office():
     data = request.json
     return jsonify(landmaster_api.addOffice(data['office']))    
 
-@app.route('/landmaster/get_topvalue_office', methods=['GET'])
+@app.route('/landmaster/top_value_office', methods=['POST'])
 def get_topvalue_office():
     data = request.json
     return jsonify(landmaster_api.get_top_value_office(data['landmaster_id']))

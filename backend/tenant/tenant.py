@@ -3,19 +3,19 @@ from backend.api import Api
 import datetime
 
 class TenantApi(Api):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, today):
+        super().__init__(today)
 
     def checkIn(self, id_rent):
         cursor = self._db.getCursor()
 
-        current_date = datetime.datetime.today()
+        current_date = self._today
 
         preCheckIn = f"SELECT bookingStart FROM rents WHERE rentId = '{id_rent}'"
         cursor.execute(preCheckIn)
         db_PreCheckIn = cursor.fetchone()
 
-        if (current_date - db_PreCheckIn['bookingStart']).days <= 0:
+        if abs((current_date - db_PreCheckIn['bookingStart']).days) <= 0:
 
             update = (
             f"UPDATE rents "
@@ -45,22 +45,21 @@ class TenantApi(Api):
     def checkOut(self, id_rent):
         cursor = self._db.getCursor()
 
-        current_date = datetime.date.today()
+        current_date = self._today
 
         preCheckOut = f"SELECT checkIn FROM rents WHERE rentId = '{id_rent}'"
         cursor.execute(preCheckOut)
         db_preCheckOut = cursor.fetchone()
 
         if db_preCheckOut is None:
-            return{
+            return {
             'success': False,
             'error': 'You have to check-in first.'
-            }
-
+        }
         else:
             update = (
-            f"UPDATE rents"
-            f"SET checkOut = '{current_date}'"
+            f"UPDATE rents "
+            f"SET checkOut = '{current_date}' "
             f"WHERE rentId = '{id_rent}'")
             cursor.execute(update)
 
@@ -68,14 +67,14 @@ class TenantApi(Api):
             cursor.execute(validation)
             db_validation = cursor.fetchone()
 
-            if (current_date - db_validation['checkOut']).days > 0:
+            if abs((current_date - db_validation['checkOut']).days) > 0:
                 return {
                     'success': False,
                     'error': 'Unable to checkout'
                 }
 
             return {
-                    'success': True
+                'success': True
             }
 
 
@@ -109,8 +108,8 @@ class TenantApi(Api):
         end = datetime.datetime.strptime(rent_days[-1], '%Y-%m-%d')
 
         insert = (
-            f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd, scoring) "
-            f"VALUES ({id_office}, {id_tenant}, '{start}', '{end}', {0})")
+            f"INSERT INTO rents (officeId, tenantId, bookingStart, bookingEnd) "
+            f"VALUES ({id_office}, {id_tenant}, '{start}', '{end}')")
         cursor.execute(insert)
         self._db.commit()
 
@@ -182,8 +181,8 @@ class TenantApi(Api):
 
         if 'available_now' in filter and filter['available_now'] == True and len(db_offices) > 0:
             for d in db_offices:
-                occupied_days = self.getOfficeOccupation(d['officeId'], datetime.date.today().month)
-                if datetime.date.today().isoformat() in occupied_days['days']:
+                occupied_days = self.getOfficeOccupation(d['officeId'], self._today.month)
+                if self._today.isoformat() in occupied_days['days']:
                     db_offices.remove(d)
 
         return {

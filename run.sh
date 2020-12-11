@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PORT=${PORT:-5804}
-THREADS=${THREADS:-7}
+THREADS=${THREADS:-1}
 PRELOAD=${PRELOAD:--preload}
 
 gunicorn \

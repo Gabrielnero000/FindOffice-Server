@@ -2,8 +2,8 @@ from backend.api import Api
 
 
 class AuthApi(Api):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, today):
+        super().__init__(today)
 
     def login(self, email, password, user_type):
         cursor = self._db.getCursor()
@@ -41,6 +41,7 @@ class AuthApi(Api):
         # Check if there is any users with that email
         query_sql = f"SELECT * FROM {user['type']} WHERE email = '{user['email']}'"
         cursor.execute(query_sql)
+
         if cursor.fetchone() is not None:
             return {
                 'success': False,
@@ -54,7 +55,6 @@ class AuthApi(Api):
             f"VALUES ('{user['name']}', '{user['email']}', '{user['password']}')"
         )
         cursor.execute(insert_sql)
-        self._db.commit()
 
         # Return inserted user
         query_sql = f"SELECT * FROM {user['type']} WHERE {user['type']+'Id'} = last_insert_id()"

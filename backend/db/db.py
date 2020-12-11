@@ -1,3 +1,5 @@
+from multiprocessing import Lock
+
 import mysql.connector
 from mysql.connector import errorcode
 from loguru import logger
