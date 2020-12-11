@@ -249,7 +249,7 @@ class TenantApi(Api):
         update_rent = (
             f"UPDATE rents SET "
             f"scoring = {score} "
-            f"WHERE officeId = {db_office['officeId']}")
+            f"WHERE rentId = {id_rent}")
         cursor.execute (update_rent)
         self._db.commit()
 
