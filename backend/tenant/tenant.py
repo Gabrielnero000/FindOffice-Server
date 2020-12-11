@@ -104,7 +104,7 @@ class TenantApi(Api):
 
     def rent(self, id_office, id_tenant, rent_days):
         cursor = self._db.getCursor()
-        
+
         start = datetime.datetime.strptime(rent_days[0], '%Y-%m-%d')
         end = datetime.datetime.strptime(rent_days[-1], '%Y-%m-%d')
 
@@ -162,21 +162,21 @@ class TenantApi(Api):
             sql += conjunction(sql)
             sql += f"district LIKE '%{filter['district']}%' "
 
-        if 'capacity' in filter and type(filter['capacity']) == int and filter['capacity'] >= 0:
+        if 'capacity' in filter and type(filter['capacity']) == int and filter['capacity'] > 0:
             sql += conjunction(sql)
             sql += f"capacity >= {filter['capacity']} "
 
-        if ('min_price' in filter and type(filter['min_price']) == float and filter['min_price'] >= 0
-            and 'max_price' in filter and type(filter['max_price']) == float
-            and filter['max_price'] >= filter['min_price']):
+        if 'min_price' in filter and type(filter['min_price']) == float and filter['min_price'] > 0:
             sql += conjunction(sql)
-            sql += f"(daily_rate BETWEEN {filter['min_price']} AND {filter['max_price']}) "
-
+            sql += f"daily_rate >= {filter['min_price']} "
+        if 'max_price' in filter and type(filter['max_price']) == float and filter['max_price'] >= filter['min_price']:
+            sql += conjunction(sql)
+            sql += f"daily_rate <= {filter['max_price']} "
         if 'order_by' in filter and (filter['order_by'] == 'score' or filter['order_by'] == 'price'):
             sql += (
                 f"ORDER BY (CASE WHEN '{filter['order_by']}' = 'price' THEN daily_rate END) ASC, "
                 f"(CASE WHEN '{filter['order_by']}' = 'score' THEN scoring END) DESC")
-
+        print(sql)
         cursor.execute(sql)
         db_offices = cursor.fetchall()
 
